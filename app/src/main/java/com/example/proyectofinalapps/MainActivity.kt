@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.proyectofinalapps.ui.theme.AlertasAppTheme
+import com.example.proyectofinalapps.ui.theme.ProyectoFinalAppsTheme
 import com.example.proyectofinalapps.ui.theme.navigation.Navigation
 import com.example.proyectofinalapps.ui.theme.screen.Comentarios
 import com.example.proyectofinalapps.ui.theme.screen.ConfarmationCode
@@ -31,30 +32,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AlertasAppTheme {
 
-                //SelectFileScreen()
-                //LoginScreen(navigateToRegister = { }, navigateToForgotPasswordScreen = { })
-                Navigation()
-                //DetailsReportScreeen()
-                //RegisterScreen()
-                //ForgotPasswordScreen()
-                //EmailForgotPasswordScreen()
-                //NewReportScreen()
-                //ResetPassword()
-                //ConfarmationCode()
-                //VerificationDelete()
-                //MenuNotifications()
-                //Profile()
-                //Comentarios()
-                //Historial()
-                //PendientesVerificacion()
-                //Rechazo()
-                //Reportes()
-                //Notification()
-                //HomeUser()
-                //HomeAdmin()
+                AlertasAppTheme {
+                    //SelectFileScreen()
+                    //LoginScreen(navigateToRegister = { }, navigateToForgotPasswordScreen = { })
+                    Navigation()
+                    //DetailsReportScreeen()
+                    //RegisterScreen()
+                    //ForgotPasswordScreen()
+                    //EmailForgotPasswordScreen()
+                    //NewReportScreen()
+                    //ResetPassword()
+                    //ConfarmationCode()
+                    //VerificationDelete()
+                    //MenuNotifications()
+                    //Profile()
+                    //Comentarios()
+                    //Historial()
+                    //PendientesVerificacion()
+                    //Rechazo()
+                    //Reportes()
+                    //Notification()
+                    //HomeUser()
+                    //HomeAdmin()
+                }
             }
         }
     }
-}

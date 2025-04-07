@@ -48,6 +48,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinalapps.R
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,131 +74,183 @@ fun LoginScreen(
     var context = LocalContext.current
     Scaffold { padding ->
 
-        Column(
+        Box(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = stringResource(id = R.string.login_title))
+                .fillMaxSize()
+                .padding(padding)) {
 
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                value = email,
-                singleLine = true,
-                isError = errorEmail,
-                supportingText = {
-                    if (errorEmail) {
-                        Text(text = stringResource(R.string.validationEmail))
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(0.8f),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                label = {
-                    Text(text = stringResource(id = R.string.emailLabel))
-                },
-                onValueChange = {
-                    email = it
-                    errorEmail = !Patterns.EMAIL_ADDRESS.matcher(email).matches()
-                }
-            )
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text(text = stringResource(id = R.string.passwordLabel)) },
-                singleLine = true,
-                isError = errorPassword,
-                visualTransformation = if (visibilityPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                trailingIcon = {
-                    val image =
-                        if (visibilityPassword) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
-                    IconButton(onClick = { visibilityPassword = !visibilityPassword }) {
-                        Icon(imageVector = image, contentDescription = stringResource(id = R.string.show_password))
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(0.8f),
-                supportingText = {
-                    if (errorPassword) {
-                        errorPassword = password.length < 4
-                        Text(text = stringResource(id = R.string.validationPassword))
-                    }
-                }
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row {
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = stringResource(id = R.string.validationForgotPassword),
-                    color = Color(0xFF007AFF),
-                    fontSize = 14.sp,
-                    modifier = Modifier.clickable { navigateToForgotPasswordScreen() }
-                )
-            }
-
-            Button(
-                onClick = {
-                    if (email == "usuario@gmail.com" && password == "1234") {
-                        Toast.makeText(context, context.getString(R.string.login_success), Toast.LENGTH_SHORT).show()
-                            navigateToHomeUser()
-                    } else {
-                        Toast.makeText(
-                            context, context.getString(R.string.login_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        navigateToHomeUser()
-                    }
-                },
+            Image(
+                painter = painterResource(id = R.drawable.layered_waves_haikei),
+                contentDescription = "Fondo con ondas azules",
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 0.dp)
 
-                    .fillMaxWidth(0.8f)
-                    .height(48.dp),
+            )
 
-                shape = RectangleShape,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = Icons.Rounded.Person,
-                    contentDescription = "Icono de usuario"
-                )
                 Text(
-                    text = stringResource(id = R.string.login_button),
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    text = stringResource(id = R.string.login_title),
+                    color = Color(0xFF1976D2),
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
                 )
-            }
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = stringResource(id = R.string.login_description),
+                    color = Color.Gray,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                //email
+                OutlinedTextField(
+                    value = email,
+                    singleLine = true,
+                    isError = errorEmail,
+                    supportingText = {
+                        if (errorEmail) {
+                            Text(text = stringResource(R.string.validationEmail))
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    label = {
+                        Text(text = stringResource(id = R.string.emailLabel))
+                    },
+                    onValueChange = {
+                        email = it
+                        errorEmail = !Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Person,
+                            contentDescription = null,
+                            tint = Color(0xFF1976D2)
+                        )
+                    }
+                )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(0.8f)
-            ) {
-                Divider(modifier = Modifier.weight(1f), color = Color.Gray, thickness = 1.dp)
-                Canvas(modifier = Modifier.size(8.dp)) {
-                    drawCircle(color = Color.Gray)
+                // Password
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text(text = stringResource(id = R.string.passwordLabel)) },
+                    singleLine = true,
+                    isError = errorPassword,
+                    visualTransformation = if (visibilityPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    supportingText = {
+                        if (errorPassword) {
+                            errorPassword = password.length < 4
+                            Text(text = stringResource(id = R.string.validationPassword))
+                        }
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null,
+                            tint = Color(0xFF1976D2)
+                        )
+                    },
+                    trailingIcon = {
+                        val image = if (visibilityPassword) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
+                        IconButton(onClick = { visibilityPassword = !visibilityPassword }) {
+                            Icon(
+                                imageVector = image,
+                                contentDescription = stringResource(id = R.string.show_password)
+                            )
+                        }
+                    }
+                )
+
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(id = R.string.validationForgotPassword),
+                        color = Color(0xFF007AFF),
+                        fontSize = 14.sp,
+                        modifier = Modifier.clickable { navigateToForgotPasswordScreen() }
+                    )
                 }
-                Divider(modifier = Modifier.weight(1f), color = Color.Gray, thickness = 1.dp)
-            }
+                Spacer(modifier = Modifier.height(5.dp))
 
-            Spacer(modifier = Modifier.height(30.dp))
+                Button(
+                    onClick = {
+                        if (email == "usuario@gmail.com" && password == "1234") {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.login_success),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navigateToHomeUser()
+                        } else {
+                            Toast.makeText(
+                                context, context.getString(R.string.login_error),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navigateToHomeUser()
+                        }
+                    },
+                    modifier = Modifier
 
-            Spacer(modifier = Modifier.height(35.dp))
+                        .fillMaxWidth(0.8f)
+                        .height(48.dp),
 
-            Row {
-                Text(text = stringResource(id = R.string.register_prompt), color = Color.Gray)
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = stringResource(id = R.string.register_button),
-                    color = Color(0xFF007AFF),
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { navigateToRegister() }
-                )
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2))
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Person,
+                        contentDescription = "Icono de usuario"
+                    )
+                    Text(
+                        text = stringResource(id = R.string.login_button),
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(0.8f)
+                ) {
+                    Divider(modifier = Modifier.weight(1f), color = Color.Gray, thickness = 1.dp)
+                    Canvas(modifier = Modifier.size(8.dp)) {
+                        drawCircle(color = Color.Gray)
+                    }
+                    Divider(modifier = Modifier.weight(1f), color = Color.Gray, thickness = 1.dp)
+                }
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Row {
+                    Text(text = stringResource(id = R.string.register_prompt), color = Color.Gray)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(id = R.string.register_button),
+                        color = Color(0xFF007AFF),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.clickable { navigateToRegister() }
+                    )
+                }
             }
         }
     }

@@ -22,6 +22,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40
 
+
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -52,7 +53,19 @@ fun AlertasAppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
         content = content
     )
 }
+
+
+@Composable
+fun ProyectoFinalAppsTheme(
+    content: @Composable () -> Unit
+) {
+    MaterialTheme(
+        typography = customTypography, // 👈 Aquí la conectas
+        content = content
+    )
+}
+
+
