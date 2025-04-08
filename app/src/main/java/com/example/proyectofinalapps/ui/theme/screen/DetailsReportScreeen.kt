@@ -191,7 +191,7 @@ fun DetailsReportScreeen(navigateToHomeUser: () -> Unit, navigateToComentarios: 
             Button(
                 onClick = { },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF0061FF), // Azul
+                    containerColor = Color(0xFF0061FF),
                     contentColor = Color.White
                 ),
                 modifier = Modifier
@@ -209,7 +209,7 @@ fun DetailsReportScreeen(navigateToHomeUser: () -> Unit, navigateToComentarios: 
             Button(
                 onClick = { },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF0061FF), // Azul
+                    containerColor = Color(0xFF0061FF),
                     contentColor = Color.White
                 ),
                 modifier = Modifier

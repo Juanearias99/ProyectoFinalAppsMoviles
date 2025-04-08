@@ -30,11 +30,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectofinalapps.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +49,7 @@ fun Reportes(modifier: Modifier = Modifier) {
                     IconButton(onClick = {  }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "Volver"
+                            contentDescription = stringResource(R.string.volver)
                         )
                     }
                 }
@@ -63,7 +65,7 @@ fun Reportes(modifier: Modifier = Modifier) {
         ) {
 
             Text(
-                text = "Lista de reportes pendientes de verificación",
+                text = stringResource(R.string.lista_reportes_pendientes),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -103,7 +105,7 @@ fun CajaBusqueda() {
             value = "",
             onValueChange = {},
             readOnly = true,
-            placeholder = { Text(text = "Value") },
+            placeholder = { Text(text = stringResource(R.string.valor)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -112,8 +114,7 @@ fun CajaBusqueda() {
                 IconButton(onClick = { expanded = !expanded }) {
                     Icon(
                         imageVector = Icons.Outlined.Menu,
-                        contentDescription = "Menú"
-                    )
+                        contentDescription = stringResource(R.string.menu))
                 }
             }
         )

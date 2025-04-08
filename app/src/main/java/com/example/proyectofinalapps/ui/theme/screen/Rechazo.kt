@@ -29,10 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectofinalapps.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,7 +60,7 @@ fun Rechazo(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "Volver"
+                            contentDescription = stringResource(R.string.volver)
                         )
                     }
                 }
@@ -72,10 +74,11 @@ fun Rechazo(
                 .padding(horizontal = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(20.dp)) // Reducido porque el TopAppBar ya ocupa espacio
+            Spacer(modifier = Modifier.height(20.dp))
+
 
             Text(
-                text = "Motivo de Rechazo",
+                text = stringResource(R.string.motivo_rechazo),
                 fontSize = 30.sp,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
@@ -87,7 +90,7 @@ fun Rechazo(
                 label = {
                     if (comentario.isEmpty()) {
                         Text(
-                            text = "Escribir motivo de rechazo",
+                            text = stringResource(R.string.escribir_motivo),
                             color = Color.Gray
                         )
                     }
@@ -116,7 +119,7 @@ fun Rechazo(
                     .padding(horizontal = 16.dp),
                 shape = RectangleShape
             ) {
-                Text(text = "RECHAZAR", fontSize = 20.sp)
+                Text(text = stringResource(R.string.rechazar).uppercase(), fontSize = 20.sp)
             }
         }
     }

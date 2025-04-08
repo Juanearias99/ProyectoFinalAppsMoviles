@@ -29,8 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.proyectofinalapps.R
 import com.example.proyectofinalapps.ui.theme.components.componente_comentarios
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,22 +53,21 @@ fun Comentarios(
                     IconButton(onClick = {  }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "Volver",
-                            modifier = Modifier
+                            contentDescription = stringResource(R.string.volver),
+                                    modifier = Modifier
                                 .clickable { navigateToDetailReportsSreen() }
                         )
                     }
                 }
             )
         }
-    ) { paddingValues ->
-        paddingValues
+    ) { paddingValues -> paddingValues
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Comentarios",
+                        text = (stringResource(R.string.comentarios_title)),
                         style = MaterialTheme.typography.titleLarge
                     )
                 },
@@ -91,11 +92,12 @@ fun Comentarios(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
+            //OutlinedTextField es un campo de texto que se puede editar
             OutlinedTextField(
                 value = nuevoComentario,
                 onValueChange = { nuevoComentario = it },
-                label = { Text("COMENTAR") },
-                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.comentar)) },
+                        modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
 
@@ -111,7 +113,7 @@ fun Comentarios(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = nuevoComentario.isNotEmpty()
             ) {
-                Text("PUBLICAR")
+                Text(stringResource(R.string.publicar))
             }
 
             Spacer(modifier = Modifier.height(20.dp))

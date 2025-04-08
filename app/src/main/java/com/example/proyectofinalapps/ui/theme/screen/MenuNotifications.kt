@@ -16,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.proyectofinalapps.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +35,7 @@ fun MenuNotifications(){
         Button(
             onClick = { },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF), // Azul
+                containerColor = Color(0xFF0061FF),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -42,7 +44,7 @@ fun MenuNotifications(){
             shape = RoundedCornerShape(8.dp),
         ) {
             Text(
-                text = "Comentarios",
+                text = stringResource(R.string.ver_comentarios),
                 fontWeight = FontWeight.Bold
             )
         }
@@ -51,7 +53,7 @@ fun MenuNotifications(){
         Button(
             onClick = { },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF), // Azul
+                containerColor = Color(0xFF0061FF),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -60,7 +62,7 @@ fun MenuNotifications(){
             shape = RoundedCornerShape(8.dp),
         ) {
             Text(
-                text = "Ver reportes",
+                text = stringResource(R.string.ver_reportes),
                 fontWeight = FontWeight.Bold
             )
         }

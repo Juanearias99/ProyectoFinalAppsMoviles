@@ -61,13 +61,13 @@ fun EmailForgotPasswordScreen() {
             isError = errorEmail,
             supportingText = {
                 if (errorEmail) {
-                    Text(text = stringResource(id = R.string.validation_email))
+                    Text(text = stringResource(id = R.string.validationEmail))
                 }
             },
             modifier = Modifier.fillMaxWidth(0.8f),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             label = {
-                Text(text = stringResource(id = R.string.email_label))
+                Text(text = stringResource(id = R.string.emailLabel))
             },
             onValueChange = {
                 email = it

@@ -80,7 +80,7 @@ fun HomeUser(
                 navigateToProfile()
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF), // Azul
+                containerColor = Color(0xFF0061FF),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -107,7 +107,7 @@ fun HomeUser(
                 navigateToNotifications()
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF), // Azul
+                containerColor = Color(0xFF0061FF),
                 contentColor = Color.White
             ),
 
@@ -136,7 +136,7 @@ fun HomeUser(
                 navigateToNewReportNew()
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF), // Azul
+                containerColor = Color(0xFF0061FF),
                 contentColor = Color.White
             ),
             modifier = Modifier
