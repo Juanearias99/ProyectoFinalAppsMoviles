@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectofinalapps.R
+import androidx.compose.ui.res.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +48,7 @@ fun PendientesVerificacion() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Pendientes de Verificación") },
+                title = { Text(stringResource(R.string.pendientes_verificacion_titulo))},
                 navigationIcon = {
                     IconButton(onClick = { }) {
                         Icon(
@@ -93,7 +95,7 @@ fun PendientesVerificacion() {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Value 1",
+                            text = stringResource(R.string.valor_1),
                             fontSize = 18.sp,
                             modifier = Modifier.weight(1f)
                         )
@@ -112,7 +114,7 @@ fun PendientesVerificacion() {
                     .padding(horizontal = 16.dp),
                 shape = RectangleShape
             ) {
-                Text("Verificar")
+                Text(stringResource(R.string.verificar))
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -125,7 +127,7 @@ fun PendientesVerificacion() {
                     .padding(horizontal = 16.dp),
                 shape = RectangleShape
             ) {
-                Text("Rechazar")
+                Text(stringResource(R.string.rechazar))
             }
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -137,7 +139,7 @@ fun PendientesVerificacion() {
                     .padding(horizontal = 16.dp),
                 shape = RectangleShape
             ) {
-                Text("Resuelto")
+                Text(stringResource(R.string.resuelto))
             }
         }
     }

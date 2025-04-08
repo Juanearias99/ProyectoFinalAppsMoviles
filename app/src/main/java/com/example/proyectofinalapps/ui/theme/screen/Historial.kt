@@ -31,13 +31,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectofinalapps.R
 import com.example.proyectofinalapps.ui.theme.components.componente_historial
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Historial(modifier: Modifier = Modifier) {
+
     var searchText by remember { mutableStateOf("") }
 
     Scaffold(
@@ -51,7 +54,7 @@ fun Historial(modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(end = 16.dp),
-                        placeholder = { Text("Buscar en historial...") },
+                        placeholder = { Text(stringResource(R.string.buscar_historial)) },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Search,
@@ -66,7 +69,7 @@ fun Historial(modifier: Modifier = Modifier) {
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
-                                        contentDescription = "Limpiar",
+                                        contentDescription = stringResource(R.string.limpiar),
                                         modifier = Modifier.size(24.dp)
                                     )
                                 }
@@ -110,7 +113,7 @@ fun Historial(modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Recientes",
+                    text = stringResource(R.string.recientes),
                     fontSize = 20.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )

@@ -93,14 +93,14 @@ fun LoginScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(6.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = stringResource(id = R.string.login_title),
-                    color = Color(0xFF1976D2),
-                    fontSize = 22.sp,
+                    color = Color.Blue,
+                    fontSize = 30.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -212,7 +212,7 @@ fun LoginScreen(
                         .height(48.dp),
 
                     shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Person,
