@@ -61,8 +61,8 @@ import androidx.compose.ui.layout.ContentScale
 @Composable
 fun LoginScreen(
     navigateToRegister: () -> Unit,
-    navigateToForgotPasswordScreen: () -> Unit,
-    navigateToHomeUser: () -> Unit
+    navigateToHomeUser: () -> Unit,
+    navigateToEmailForgotPassword: () -> Unit
 ) {
 
     var email by rememberSaveable { mutableStateOf("") }
@@ -184,7 +184,7 @@ fun LoginScreen(
                         text = stringResource(id = R.string.validationForgotPassword),
                         color = Color(0xFF007AFF),
                         fontSize = 14.sp,
-                        modifier = Modifier.clickable { navigateToForgotPasswordScreen() }
+                        modifier = Modifier.clickable { navigateToEmailForgotPassword() }
                     )
                 }
                 Spacer(modifier = Modifier.height(5.dp))
@@ -198,7 +198,13 @@ fun LoginScreen(
                                 Toast.LENGTH_SHORT
                             ).show()
                             navigateToHomeUser()
-                        } else {
+                        } else if (email == "Admin@gmail.com" && password == "12345") {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.login_success),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }else {
                             Toast.makeText(
                                 context, context.getString(R.string.login_error),
                                 Toast.LENGTH_SHORT

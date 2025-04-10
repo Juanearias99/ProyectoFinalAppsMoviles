@@ -31,17 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.proyectofinalapps.R
 import com.example.proyectofinalapps.ui.theme.components.componente_comentarios
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Comentarios(
-    modifier: Modifier = Modifier,
-    navController: NavController? = null,
-    navigateToDetailReportsSreen: () -> Unit
-) {
+fun Comentarios(navigateToMenuNotifications: () -> Unit) {
     var nuevoComentario by remember { mutableStateOf("") }
     val context = LocalContext.current
 
@@ -55,7 +50,7 @@ fun Comentarios(
                             imageVector = Icons.Outlined.ArrowBack,
                             contentDescription = stringResource(R.string.volver),
                                     modifier = Modifier
-                                .clickable { navigateToDetailReportsSreen() }
+                                .clickable { navigateToMenuNotifications() }
                         )
                     }
                 }
@@ -72,7 +67,7 @@ fun Comentarios(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController?.popBackStack() }) {
+                    IconButton(onClick = { }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
                             contentDescription = "Volver"

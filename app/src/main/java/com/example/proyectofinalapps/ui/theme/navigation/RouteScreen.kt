@@ -64,4 +64,13 @@ sealed class  RouteScreen {
 
     @Serializable
     data object VerificationDelete : RouteScreen()
+
+    @Serializable
+    data object CodeVerification : RouteScreen()
+
+    @Serializable
+    data object VerificationImport : RouteScreen()
+
+    @Serializable
+    data object VerificationResult : RouteScreen()
 }

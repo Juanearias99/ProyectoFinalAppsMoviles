@@ -44,12 +44,12 @@ import com.example.proyectofinalapps.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResetPassword(navigateToCodeVerification: () -> Unit, navigateToLoginScreenP: () -> Unit) {
-    var passwordConfirmation by rememberSaveable { mutableStateOf("") }
+fun VerificationResult(navigateToDetailReports: () -> Unit) {
     var password by rememberSaveable { mutableStateOf("") }
     var errorPassword by rememberSaveable { mutableStateOf(false) }
     var visibilityPassword by remember { mutableStateOf(false) }
-    var visibilityPasswordConfirmation by remember { mutableStateOf(false) }
+
+
     var context = LocalContext.current
 
     Scaffold(
@@ -62,7 +62,9 @@ fun ResetPassword(navigateToCodeVerification: () -> Unit, navigateToLoginScreenP
                             imageVector = Icons.Outlined.ArrowBack,
                             contentDescription = "Volver",
                             modifier = Modifier
-                                .clickable { navigateToCodeVerification() }
+                                .clickable {
+                                    navigateToDetailReports()
+                                }
                         )
                     }
                 }
@@ -71,6 +73,7 @@ fun ResetPassword(navigateToCodeVerification: () -> Unit, navigateToLoginScreenP
     ) { paddingValues ->
         paddingValues
         Scaffold { padding ->
+
             Column(
                 modifier = Modifier
                     .padding(16.dp)
@@ -78,11 +81,13 @@ fun ResetPassword(navigateToCodeVerification: () -> Unit, navigateToLoginScreenP
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.ResetPasswordTitle))
+
+                Text(text = stringResource(id = R.string.Titulo_Reportes))
+
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text(text = stringResource(id = R.string.ResetPassword)) },
+                    label = { Text(text = stringResource(id = R.string.AccountMessagePassword)) },
                     singleLine = true,
                     isError = errorPassword,
                     visualTransformation = if (visibilityPassword) VisualTransformation.None else PasswordVisualTransformation(),
@@ -106,47 +111,19 @@ fun ResetPassword(navigateToCodeVerification: () -> Unit, navigateToLoginScreenP
                     }
                 )
 
-                OutlinedTextField(
-                    value = passwordConfirmation,
-                    onValueChange = { passwordConfirmation = it },
-                    label = { Text(text = stringResource(id = R.string.ResetPasswordConfirmation)) },
-                    singleLine = true,
-                    isError = errorPassword,
-                    visualTransformation = if (visibilityPasswordConfirmation) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    trailingIcon = {
-                        val image =
-                            if (visibilityPasswordConfirmation) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
-                        IconButton(onClick = {
-                            visibilityPasswordConfirmation = !visibilityPasswordConfirmation
-                        }) {
-                            Icon(
-                                imageVector = image,
-                                contentDescription = stringResource(id = R.string.show_password)
-                            )
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    supportingText = {
-                        if (errorPassword) {
-                            errorPassword = passwordConfirmation.length < 4
-                            Text(text = stringResource(id = R.string.validationPassword))
-                        }
-                    }
-                )
+
 
                 Spacer(modifier = Modifier.height(10.dp))
 
 
                 Button(
                     onClick = {
-                        if (passwordConfirmation == "123456" && password == "123456") {
+                        if (password == "123456") {
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.login_success),
+                                context.getString(R.string.Resuelto_Report),
                                 Toast.LENGTH_SHORT
                             ).show()
-                            navigateToLoginScreenP()
                         } else {
                             Toast.makeText(
                                 context, context.getString(R.string.ConfirmationButtonError),
@@ -161,12 +138,11 @@ fun ResetPassword(navigateToCodeVerification: () -> Unit, navigateToLoginScreenP
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2))
                 ) {
                     Text(
-                        text = stringResource(id = R.string.ConfirmationButton),
+                        text = stringResource(id = R.string.Titulo_Reportes),
                         color = Color.White,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-
-                        )
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }

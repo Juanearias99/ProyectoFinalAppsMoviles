@@ -87,4 +87,12 @@
     <string name="valor">Value</string>
     <string name="menu">Menú</string>
     <string name="toast_welcome">Bienvenido</string>
+    <string name="MessageEmail">Código de seguridad enviado</string>
+    <string name="MessageCodeError">Codigo invalido</string>
+    <string name="Code">Ingresa codigo enviado</string>
+    <string name="VerificationCode">Verificar</string>
+    <string name="Titulo_Reportes">Reportes</string>
+    <string name="Important_Report">Es Importante</string>
+    <string name="Resuelto_Report">Resuelto</string>
+    <string name="Titulo_Importancia">Importancia</string>
 </resources>

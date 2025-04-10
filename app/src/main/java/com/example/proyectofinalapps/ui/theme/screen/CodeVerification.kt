@@ -1,4 +1,4 @@
-package com.example.proyectofinalapps.ui.theme.screens
+package com.example.proyectofinalapps.ui.theme.screen
 
 import android.util.Patterns
 import android.widget.Toast
@@ -43,12 +43,9 @@ import com.example.proyectofinalapps.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmailForgotPasswordScreen(
-    navigateToCodeVerification: () -> Unit,
-    navigateToLoginScreen: () -> Unit
-) {
-    var email by rememberSaveable { mutableStateOf("") }
-    var errorEmail by rememberSaveable { mutableStateOf(false) }
+fun CodeVerification(navigateToResetPassword: () -> Unit, navigateToEmailForgotPassword: () -> Unit) {
+    var code by rememberSaveable { mutableStateOf("") }
+    var errorCode by rememberSaveable { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -62,7 +59,7 @@ fun EmailForgotPasswordScreen(
                             imageVector = Icons.Outlined.ArrowBack,
                             contentDescription = "Volver",
                             modifier = Modifier
-                                .clickable { navigateToLoginScreen() }
+                                .clickable { navigateToEmailForgotPassword() }
                         )
                     }
                 }
@@ -79,35 +76,35 @@ fun EmailForgotPasswordScreen(
         ) {
 
             Text(
-                text = stringResource(id = R.string.emailLabel),
+                text = stringResource(id = R.string.Code),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = email,
+                value = code,
                 singleLine = true,
-                isError = errorEmail,
+                isError = errorCode,
                 supportingText = {
-                    if (errorEmail) {
+                    if (errorCode) {
                         Text(text = stringResource(id = R.string.validationEmail))
                     }
                 },
                 modifier = Modifier.fillMaxWidth(0.8f),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 label = {
-                    Text(text = stringResource(id = R.string.emailLabel))
+                    Text(text = stringResource(id = R.string.Code))
                 },
                 onValueChange = {
-                    email = it
-                    errorEmail = !Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                    code = it
+                    errorCode = !Patterns.EMAIL_ADDRESS.matcher(code).matches()
                 }
             )
 
             Button(
                 onClick = {
-                    if (email == "sophia.cuba14@gmail.com") {
+                    if (code == "123456") {
                         Toast.makeText(
                             context,
                             context.getString(R.string.toast_welcome),
@@ -116,9 +113,9 @@ fun EmailForgotPasswordScreen(
                     } else {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.validationEmail), Toast.LENGTH_SHORT
+                            context.getString(R.string.MessageCodeError), Toast.LENGTH_SHORT
                         ).show()
-                        navigateToCodeVerification()
+                        navigateToResetPassword()
                     }
 
                 },
@@ -133,7 +130,7 @@ fun EmailForgotPasswordScreen(
                     contentDescription = "Icono de Buscar Correo"
                 )
                 Text(
-                    text = stringResource(id = R.string.continue_button),
+                    text = stringResource(id = R.string.VerificationCode),
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
@@ -142,5 +139,3 @@ fun EmailForgotPasswordScreen(
         }
     }
 }
-
-

@@ -46,7 +46,12 @@ import com.example.proyectofinalapps.ui.theme.components.TextFieldForm
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsReportScreeen(navigateToHomeUser: () -> Unit, navigateToComentarios: () -> Unit) {
+fun DetailsReportScreeen(
+    navigateToHomeUser: () -> Unit,
+    navigateToComentarios: () -> Unit,
+    navigateToVerificationImport: () -> Unit,
+    navigateToVerificationResult: () -> Unit
+) {
     var nameReport by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
     val categories = listOf("Rojo", "Amarillo", "Verde", "Morado")
@@ -189,7 +194,9 @@ fun DetailsReportScreeen(navigateToHomeUser: () -> Unit, navigateToComentarios: 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
-                onClick = { },
+                onClick = {
+                    navigateToVerificationResult()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF0061FF),
                     contentColor = Color.White
@@ -207,7 +214,9 @@ fun DetailsReportScreeen(navigateToHomeUser: () -> Unit, navigateToComentarios: 
 
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                onClick = { },
+                onClick = {
+                    navigateToVerificationImport()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF0061FF),
                     contentColor = Color.White

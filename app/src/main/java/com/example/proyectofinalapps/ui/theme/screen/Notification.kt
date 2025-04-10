@@ -39,7 +39,7 @@ import com.example.proyectofinalapps.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Notification( navigateToHomeUser: () -> Unit) {
+fun Notification(navigateToHomeUser: () -> Unit, navigateToMenuNotifications: () -> Unit) {
 
 
     Scaffold(
@@ -82,7 +82,7 @@ fun Notification( navigateToHomeUser: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(10) {
-                    CajaBusquedaN()
+                    CajaBusquedaN(navigateToMenuNotifications)
                 }
             }
         }
@@ -92,7 +92,7 @@ fun Notification( navigateToHomeUser: () -> Unit) {
 }
 
 @Composable
-fun CajaBusquedaN() {
+fun CajaBusquedaN(navigateToMenuNotifications: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -110,10 +110,12 @@ fun CajaBusquedaN() {
                 .height(50.dp),
             shape = RoundedCornerShape(20.dp),
             trailingIcon = {
-                IconButton(onClick = { expanded = !expanded }) {
+                IconButton(onClick = { }) {
                     Icon(
                         imageVector = Icons.Outlined.Menu,
-                        contentDescription = "Menú"
+                        contentDescription = "Menú",
+                        modifier = Modifier
+                            .clickable { navigateToMenuNotifications() }
                     )
                 }
             }

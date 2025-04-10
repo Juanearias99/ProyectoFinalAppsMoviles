@@ -5,13 +5,18 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.proyectofinalapps.ui.theme.screen.CodeVerification
 import com.example.proyectofinalapps.ui.theme.screen.Comentarios
 import com.example.proyectofinalapps.ui.theme.screen.HomeUser
+import com.example.proyectofinalapps.ui.theme.screen.MenuNotifications
 import com.example.proyectofinalapps.ui.theme.screen.Notification
 import com.example.proyectofinalapps.ui.theme.screen.Profile
 import com.example.proyectofinalapps.ui.theme.screen.ResetPassword
+import com.example.proyectofinalapps.ui.theme.screen.VerificatioImport
 import com.example.proyectofinalapps.ui.theme.screen.VerificationDelete
+import com.example.proyectofinalapps.ui.theme.screen.VerificationResult
 import com.example.proyectofinalapps.ui.theme.screens.DetailsReportScreeen
+import com.example.proyectofinalapps.ui.theme.screens.EmailForgotPasswordScreen
 import com.example.proyectofinalapps.ui.theme.screens.LoginScreen
 import com.example.proyectofinalapps.ui.theme.screens.NewReportScreen
 import com.example.proyectofinalapps.ui.theme.screens.RegisterScreen
@@ -31,8 +36,8 @@ fun Navigation() {
             composable<RouteScreen.LoginScreen> {
                 LoginScreen(
                     navigateToRegister = { navController.navigate(RouteScreen.RegisterScreen) },
-                    navigateToForgotPasswordScreen = { navController.navigate(RouteScreen.ResetPasswordScreen) },
-                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) }
+                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
+                    navigateToEmailForgotPassword = { navController.navigate(RouteScreen.EmailForgotPasswordScreen) }
                 )
             }
 
@@ -44,6 +49,7 @@ fun Navigation() {
 
             composable<RouteScreen.ResetPasswordScreen> {
                 ResetPassword(
+                    navigateToCodeVerification = { navController.navigate(RouteScreen.CodeVerification) },
                     navigateToLoginScreenP = { navController.navigate(RouteScreen.LoginScreen) }
                 )
             }
@@ -73,26 +79,63 @@ fun Navigation() {
 
             composable<RouteScreen.Notification> {
                 Notification(
-                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser)}
+                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser)},
+                    navigateToMenuNotifications = {navController.navigate(RouteScreen.MenuNotifications)}
                 )
             }
 
             composable<RouteScreen.DetailReportsScreen> {
                 DetailsReportScreeen(
                     navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser)},
-                    navigateToComentarios = {navController.navigate(RouteScreen.Comentarios)}
+                    navigateToComentarios = {navController.navigate(RouteScreen.Comentarios)},
+                    navigateToVerificationImport = {navController.navigate(RouteScreen.VerificationImport)},
+                    navigateToVerificationResult = {navController.navigate(RouteScreen.VerificationResult)}
                 )
             }
 
             composable<RouteScreen.Comentarios> {
                 Comentarios(
-                    navigateToDetailReportsSreen = {navController.navigate(RouteScreen.DetailReportsScreen)}
+                    navigateToMenuNotifications = {navController.navigate(RouteScreen.MenuNotifications)}
                 )
             }
 
             composable<RouteScreen.VerificationDelete> {
                 VerificationDelete(
                     navigateToProfile = {navController.navigate(RouteScreen.Profile)}
+                )
+            }
+
+            composable<RouteScreen.EmailForgotPasswordScreen> {
+                EmailForgotPasswordScreen(
+                    navigateToCodeVerification = { navController.navigate(RouteScreen.CodeVerification) },
+                    navigateToLoginScreen = { navController.navigate(RouteScreen.LoginScreen) }
+                )
+            }
+
+            composable<RouteScreen.CodeVerification> {
+                CodeVerification(
+                    navigateToResetPassword = { navController.navigate(RouteScreen.ResetPasswordScreen) },
+                    navigateToEmailForgotPassword = { navController.navigate(RouteScreen.EmailForgotPasswordScreen) }
+                )
+            }
+
+            composable<RouteScreen.MenuNotifications> {
+                MenuNotifications(
+                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
+                    navigateToComentarios = {navController.navigate(RouteScreen.Comentarios)},
+                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen)}
+                )
+            }
+
+            composable<RouteScreen.VerificationImport> {
+                VerificatioImport(
+                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen) }
+                )
+            }
+
+            composable<RouteScreen.VerificationResult> {
+                VerificationResult(
+                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen)}
                 )
             }
 
