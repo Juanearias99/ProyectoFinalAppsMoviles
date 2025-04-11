@@ -95,4 +95,6 @@
     <string name="Important_Report">Es Importante</string>
     <string name="Resuelto_Report">Resuelto</string>
     <string name="Titulo_Importancia">Importancia</string>
+    <string name="Map_Admin">Mapa Admin</string>
+    <string name="Titulo_Pendiente">lista de pendientes</string>
 </resources>

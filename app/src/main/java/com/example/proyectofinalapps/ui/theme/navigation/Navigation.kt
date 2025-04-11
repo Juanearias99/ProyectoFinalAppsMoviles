@@ -7,10 +7,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyectofinalapps.ui.theme.screen.CodeVerification
 import com.example.proyectofinalapps.ui.theme.screen.Comentarios
+import com.example.proyectofinalapps.ui.theme.screen.HomeAdmin
 import com.example.proyectofinalapps.ui.theme.screen.HomeUser
 import com.example.proyectofinalapps.ui.theme.screen.MenuNotifications
+import com.example.proyectofinalapps.ui.theme.screen.MenuPendientes
 import com.example.proyectofinalapps.ui.theme.screen.Notification
+import com.example.proyectofinalapps.ui.theme.screen.PendientesVerificacion
 import com.example.proyectofinalapps.ui.theme.screen.Profile
+import com.example.proyectofinalapps.ui.theme.screen.Rechazo
 import com.example.proyectofinalapps.ui.theme.screen.ResetPassword
 import com.example.proyectofinalapps.ui.theme.screen.VerificatioImport
 import com.example.proyectofinalapps.ui.theme.screen.VerificationDelete
@@ -37,7 +41,8 @@ fun Navigation() {
                 LoginScreen(
                     navigateToRegister = { navController.navigate(RouteScreen.RegisterScreen) },
                     navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
-                    navigateToEmailForgotPassword = { navController.navigate(RouteScreen.EmailForgotPasswordScreen) }
+                    navigateToEmailForgotPassword = { navController.navigate(RouteScreen.EmailForgotPasswordScreen) },
+                    naviagteToHomeAdmin = { navController.navigate(RouteScreen.HomeAdmin)}
                 )
             }
 
@@ -139,6 +144,32 @@ fun Navigation() {
                 )
             }
 
+            composable<RouteScreen.HomeAdmin>{
+                HomeAdmin(
+                    navigateToLoginScreen = { navController.navigate(RouteScreen.LoginScreen)},
+                    NavigateToMenuPendientes = { navController.navigate(RouteScreen.MenuPendientes)}
+                )
+            }
+
+            composable<RouteScreen.MenuPendientes>{
+                MenuPendientes(
+                    navigateToHomeAdmin = { navController.navigate(RouteScreen.HomeAdmin)},
+                    navigateToPendientesVerificacion = { navController.navigate(RouteScreen.PendientesVerificacion)}
+                )
+            }
+
+            composable<RouteScreen.PendientesVerificacion>{
+                PendientesVerificacion(
+                    navigateToMenuPendientes = { navController.navigate(RouteScreen.MenuPendientes)},
+                    navigateToRechazo = { navController.navigate(RouteScreen.Rechazo)}
+                )
+            }
+
+            composable<RouteScreen.Rechazo>{
+                Rechazo(
+                    navigateToPendientesVerificacion = { navController.navigate(RouteScreen.PendientesVerificacion)}
+                )
+            }
         }
     }
 }

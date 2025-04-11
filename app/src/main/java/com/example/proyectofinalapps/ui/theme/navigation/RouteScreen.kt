@@ -73,4 +73,7 @@ sealed class  RouteScreen {
 
     @Serializable
     data object VerificationResult : RouteScreen()
+
+    @Serializable
+    data object MenuPendientes : RouteScreen()
 }

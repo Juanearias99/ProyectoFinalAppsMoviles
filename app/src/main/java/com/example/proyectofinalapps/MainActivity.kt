@@ -7,7 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import com.example.proyectofinalapps.ui.theme.AlertasAppTheme
 import com.example.proyectofinalapps.ui.theme.navigation.Navigation
 import com.example.proyectofinalapps.ui.theme.navigation.RouteScreen
-import com.example.proyectofinalapps.ui.theme.screen.CodeVerification
+import com.example.proyectofinalapps.ui.theme.screen.HomeAdmin
+import com.example.proyectofinalapps.ui.theme.screen.PendientesVerificacion
+import com.example.proyectofinalapps.ui.theme.screen.Rechazo
+import com.example.proyectofinalapps.ui.theme.screens.NewReportScreen
+import com.example.proyectofinalapps.ui.theme.screens.SelectFileScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?)  {
@@ -36,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     //Reportes()
                     //Notification()
                     //HomeUser()
-                    //HomeAdmin()
+                    //HomeAdmin ()
                     //CodeVerification()
                     //MenuReportes(navigateToMenuNotifications = {})
                 }

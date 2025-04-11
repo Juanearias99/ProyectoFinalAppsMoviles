@@ -2,6 +2,7 @@ package com.example.proyectofinalapps.ui.theme.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,7 +41,7 @@ import androidx.compose.ui.res.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PendientesVerificacion() {
+fun PendientesVerificacion(navigateToMenuPendientes: () -> Unit, navigateToRechazo: () -> Unit) {
     val context = LocalContext.current
     var showMenu by remember { mutableStateOf(false) }
     val options = listOf("Editar", "Copiar", "Eliminar")
@@ -53,7 +54,11 @@ fun PendientesVerificacion() {
                     IconButton(onClick = { }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "Volver"
+                            contentDescription = "Volver",
+                            modifier = Modifier
+                                    .clickable {
+                                        navigateToMenuPendientes()
+                            }
                         )
                     }
                 }
@@ -120,11 +125,17 @@ fun PendientesVerificacion() {
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
-                onClick = { Toast.makeText(context, "Rechazado", Toast.LENGTH_SHORT).show() },
+                onClick = {
+                    Toast.makeText(context,
+                        "Rechazado",
+                        Toast.LENGTH_SHORT).show()
+                    navigateToRechazo()
+                          },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(80.dp)
                     .padding(horizontal = 16.dp),
+
                 shape = RectangleShape
             ) {
                 Text(stringResource(R.string.rechazar))
