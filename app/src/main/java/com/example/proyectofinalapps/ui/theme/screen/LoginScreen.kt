@@ -185,7 +185,7 @@ fun LoginScreen(
                         text = stringResource(id = R.string.validationForgotPassword),
                         color = Color(0xFF007AFF),
                         fontSize = 14.sp,
-                        //modifier = Modifier.clickable { navigateToEmailForgotPassword() }
+                        modifier = Modifier.clickable { navigateToEmailForgotPassword() }
                     )
                 }
                 Spacer(modifier = Modifier.height(5.dp))
