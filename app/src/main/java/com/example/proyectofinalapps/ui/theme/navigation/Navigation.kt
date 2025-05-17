@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.proyectofinalapps.ui.theme.screen.CodeVerification
 import com.example.proyectofinalapps.ui.theme.screen.Comentarios
 import com.example.proyectofinalapps.ui.theme.screen.HomeAdmin
@@ -15,7 +16,6 @@ import com.example.proyectofinalapps.ui.theme.screen.Notification
 import com.example.proyectofinalapps.ui.theme.screen.PendientesVerificacion
 import com.example.proyectofinalapps.ui.theme.screen.Profile
 import com.example.proyectofinalapps.ui.theme.screen.Rechazo
-import com.example.proyectofinalapps.ui.theme.screen.ResetPassword
 import com.example.proyectofinalapps.ui.theme.screen.VerificatioImport
 import com.example.proyectofinalapps.ui.theme.screen.VerificationDelete
 import com.example.proyectofinalapps.ui.theme.screen.VerificationResult
@@ -42,7 +42,7 @@ fun Navigation() {
                     navigateToRegister = { navController.navigate(RouteScreen.RegisterScreen) },
                     navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
                     navigateToEmailForgotPassword = { navController.navigate(RouteScreen.EmailForgotPasswordScreen) },
-                    naviagteToHomeAdmin = { navController.navigate(RouteScreen.HomeAdmin)}
+                    naviagteToHomeAdmin = { navController.navigate(RouteScreen.HomeAdmin) }
                 )
             }
 
@@ -52,61 +52,61 @@ fun Navigation() {
                 )
             }
 
-            composable<RouteScreen.ResetPasswordScreen> {
+            /*composable<RouteScreen.ResetPasswordScreen> {
                 ResetPassword(
                     navigateToCodeVerification = { navController.navigate(RouteScreen.CodeVerification) },
                     navigateToLoginScreenP = { navController.navigate(RouteScreen.LoginScreen) }
                 )
-            }
+            }*/
 
             composable<RouteScreen.HomeUser> {
-                HomeUser (
-                    navigateToHomeUser = { navController.navigate(RouteScreen.LoginScreen)},
-                    navigateToProfile = { navController.navigate(RouteScreen.Profile)},
-                    navigateToNewReportNew = { navController.navigate(RouteScreen.NewReportScreen)},
-                    navigateToNotifications = { navController.navigate(RouteScreen.Notification)},
-                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen)}
+                HomeUser(
+                    navigateToHomeUser = { navController.navigate(RouteScreen.LoginScreen) },
+                    navigateToProfile = { navController.navigate(RouteScreen.Profile) },
+                    navigateToNewReport = { navController.navigate(RouteScreen.NewReportScreen) },
+                    navigateToNotifications = { navController.navigate(RouteScreen.Notification) },
+                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen) }
                 )
             }
 
             composable<RouteScreen.Profile> {
                 Profile(
-                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser)},
-                    navigateToDeleteProfile = { navController.navigate(RouteScreen.VerificationDelete)}
+                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
+                    navigateToDeleteProfile = { navController.navigate(RouteScreen.VerificationDelete) }
                 )
             }
 
             composable<RouteScreen.NewReportScreen> {
                 NewReportScreen(
-                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser)}
+                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) }
                 )
             }
 
             composable<RouteScreen.Notification> {
                 Notification(
-                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser)},
-                    navigateToMenuNotifications = {navController.navigate(RouteScreen.MenuNotifications)}
+                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
+                    navigateToMenuNotifications = { navController.navigate(RouteScreen.MenuNotifications) }
                 )
             }
 
             composable<RouteScreen.DetailReportsScreen> {
                 DetailsReportScreeen(
-                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser)},
-                    navigateToComentarios = {navController.navigate(RouteScreen.Comentarios)},
-                    navigateToVerificationImport = {navController.navigate(RouteScreen.VerificationImport)},
-                    navigateToVerificationResult = {navController.navigate(RouteScreen.VerificationResult)}
+                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
+                    navigateToComentarios = { navController.navigate(RouteScreen.Comentarios) },
+                    navigateToVerificationImport = { navController.navigate(RouteScreen.VerificationImport) },
+                    navigateToVerificationResult = { navController.navigate(RouteScreen.VerificationResult) }
                 )
             }
 
             composable<RouteScreen.Comentarios> {
                 Comentarios(
-                    navigateToMenuNotifications = {navController.navigate(RouteScreen.MenuNotifications)}
+                    navigateToMenuNotifications = { navController.navigate(RouteScreen.MenuNotifications) }
                 )
             }
 
             composable<RouteScreen.VerificationDelete> {
                 VerificationDelete(
-                    navigateToProfile = {navController.navigate(RouteScreen.Profile)}
+                    navigateToProfile = { navController.navigate(RouteScreen.Profile) }
                 )
             }
 
@@ -121,14 +121,15 @@ fun Navigation() {
                 CodeVerification(
                     navigateToResetPassword = { navController.navigate(RouteScreen.ResetPasswordScreen) },
                     navigateToEmailForgotPassword = { navController.navigate(RouteScreen.EmailForgotPasswordScreen) }
+
                 )
             }
 
             composable<RouteScreen.MenuNotifications> {
                 MenuNotifications(
                     navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
-                    navigateToComentarios = {navController.navigate(RouteScreen.Comentarios)},
-                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen)}
+                    navigateToComentarios = { navController.navigate(RouteScreen.Comentarios) },
+                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen) }
                 )
             }
 
@@ -140,34 +141,41 @@ fun Navigation() {
 
             composable<RouteScreen.VerificationResult> {
                 VerificationResult(
-                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen)}
+                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen) }
                 )
             }
 
-            composable<RouteScreen.HomeAdmin>{
+            composable<RouteScreen.HomeAdmin> {
                 HomeAdmin(
-                    navigateToLoginScreen = { navController.navigate(RouteScreen.LoginScreen)},
-                    NavigateToMenuPendientes = { navController.navigate(RouteScreen.MenuPendientes)}
+                    navigateToLogin = { navController.navigate(RouteScreen.LoginScreen)},
+                    navigateToNotifications = {navController.navigate(RouteScreen.Notification)},
+                    navigateToMenuPendientes = { navController.navigate( RouteScreen.Notification)}
                 )
             }
 
-            composable<RouteScreen.MenuPendientes>{
+            composable<RouteScreen.MenuPendientes> {
                 MenuPendientes(
-                    navigateToHomeAdmin = { navController.navigate(RouteScreen.HomeAdmin)},
-                    navigateToPendientesVerificacion = { navController.navigate(RouteScreen.PendientesVerificacion)}
+                    navigateToHomeAdmin = { navController.navigate(RouteScreen.HomeAdmin) },
+                    navigateToPendientesVerificacion = { navController.navigate(RouteScreen.PendientesVerificacion) }
                 )
             }
 
-            composable<RouteScreen.PendientesVerificacion>{
+            composable<RouteScreen.PendientesVerificacion> {
                 PendientesVerificacion(
-                    navigateToMenuPendientes = { navController.navigate(RouteScreen.MenuPendientes)},
-                    navigateToRechazo = { navController.navigate(RouteScreen.Rechazo)}
+                    navigateToMenuPendientes = { navController.navigate(RouteScreen.MenuPendientes) },
+                    navigateToRechazo = { navController.navigate(RouteScreen.Rechazo) }
                 )
             }
 
-            composable<RouteScreen.Rechazo>{
+            composable<RouteScreen.Rechazo> {
                 Rechazo(
-                    navigateToPendientesVerificacion = { navController.navigate(RouteScreen.PendientesVerificacion)}
+                    navigateToPendientesVerificacion = { navController.navigate(RouteScreen.PendientesVerificacion) }
+                )
+            }
+
+            composable<RouteScreen.RegisterScreen> {
+                RegisterScreen(
+                    navigateToLoginScreenR = { navController.navigate(RouteScreen.LoginScreen) }
                 )
             }
         }

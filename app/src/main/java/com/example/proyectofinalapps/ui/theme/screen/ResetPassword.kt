@@ -44,7 +44,7 @@ import com.example.proyectofinalapps.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResetPassword(navigateToCodeVerification: () -> Unit, navigateToLoginScreenP: () -> Unit) {
+fun ResetPassword(navigateToCodeVerification: () -> Unit, navigateToLoginScreenP: () -> Unit, navigateToHomeScreen: () -> Unit) {
     var passwordConfirmation by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var errorPassword by rememberSaveable { mutableStateOf(false) }

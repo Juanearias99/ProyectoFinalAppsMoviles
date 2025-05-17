@@ -1,193 +1,217 @@
 package com.example.proyectofinalapps.ui.theme.screen
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import android.content.Context
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.rounded.Image
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.proyectofinalapps.R
+import com.mapbox.geojson.Point
+import com.mapbox.maps.extension.compose.MapboxMap
+import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
+import com.mapbox.maps.extension.compose.annotation.rememberIconImage
+import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeUser(
     navigateToHomeUser: () -> Unit,
     navigateToProfile: () -> Unit,
-    navigateToNewReportNew: () -> Unit,
+    navigateToNewReport: () -> Unit,
     navigateToNotifications: () -> Unit,
     navigateToDetailReports: () -> Unit
-){
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { },
-                navigationIcon = {
-                    IconButton(onClick = {  }) {
-                        Icon(
-                            imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "Volver",
-                            modifier = Modifier
-                                .clickable { navigateToHomeUser() }
-                        )
-                    }
-                }
-            )
+) {
+    var selectedIndex by remember { mutableStateOf(0) }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.weight(1f)) {
+            when (selectedIndex) {
+                0 -> MapScreen()
+                1 -> HomeUserScreen(navigateToHomeUser)
+                2 -> ProfileScreen(navigateToProfile)
+                3 -> NewReportScreen(navigateToNewReport)
+                4 -> NotificationScreen(navigateToNotifications)
+                5 -> DetailReportsScreen(navigateToDetailReports)
+
+            }
         }
-    ) { paddingValues ->
-    Column (
+
+        BottomNavigationBar(
+            selectedIndex = selectedIndex,
+            onItemSelected = {  selectedIndex = it }
+        )
+    }
+}
+
+@Composable
+fun ReportMaxPage(
+    context: Context
+){
+
+
+}
+
+@Composable
+fun MapScreen() {
+    val mapViewportState = rememberMapViewportState {
+        setCameraOptions {
+            zoom(8.0)
+            center(Point.fromLngLat(-75.7358251, 4.4721139))
+            pitch(45.0)
+        }
+    }
+
+    val markerResourceId = R.drawable.red_marker
+    val marker = rememberIconImage(
+        key = markerResourceId,
+        painter = painterResource(markerResourceId)
+    )
+
+    var searchQuery by remember { mutableStateOf("") }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        MapboxMap(
+            modifier = Modifier.fillMaxSize(),
+            mapViewportState = mapViewportState,
+            //mapState = rememberMapState{
+              //  gesturesSettings = GesturesSettings{pitchEnabled = true }
+            //}
+        ) {
+            PointAnnotation(point = Point.fromLngLat(-75.7358251, 4.4721139)) {
+                iconImage = marker
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .background(Color.White, shape = RoundedCornerShape(12.dp))
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .align(Alignment.TopCenter),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menú")
+            Spacer(modifier = Modifier.width(8.dp))
+
+            TextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                placeholder = { Text("Buscar...") },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(imageVector = Icons.Default.Search, contentDescription = "Buscar")
+        }
+    }
+}
+
+@Composable
+fun HomeUserScreen(navigateTo: () -> Unit) {
+    Button(
+        onClick = navigateTo,
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp)
     ) {
 
-        Text(
-            text = stringResource(id = R.string.map_title),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+    }
+}
+
+@Composable
+fun ProfileScreen(navigateToProfile: () -> Unit) {
+    Button(
+        onClick = navigateToProfile,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Ir al perfil")
+    }
+}
+
+@Composable
+fun NewReportScreen(navigateToNewReport: () -> Unit) {
+    Button(
+        onClick = navigateToNewReport,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Ir a nuevo reporte")
+    }
+}
+
+@Composable
+fun NotificationScreen(navigateToNotifications: () -> Unit) {
+    Button(
+        onClick = navigateToNotifications,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Ir a notificaciones")
+    }
+}
+
+@Composable
+fun DetailReportsScreen(navigateToDetailReports: () -> Unit) {
+    Button(
+        onClick = navigateToDetailReports,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Ir a Detalles De Reportes")
+    }
+}
+
+@Composable
+fun BottomNavigationBar(
+    selectedIndex: Int,
+    onItemSelected: (Int) -> Unit
+) {
+    NavigationBar {
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Person, contentDescription = "Mapa") },
+            selected = selectedIndex == 0,
+            onClick = { onItemSelected(0) }
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        Button(
-            onClick = {
-                navigateToProfile()
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF),
-                contentColor = Color.White
-            ),
-            modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .height(45.dp),
-            shape = RoundedCornerShape(8.dp),
-        ) {
-
-            Icon(
-                imageVector = Icons.Rounded.Person,
-                contentDescription = "Icono de usuario"
-            )
-            Text(
-                text = "Perfil",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { navigateToProfile() }
-
-            )
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(
-            onClick = {
-                navigateToNotifications()
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF),
-                contentColor = Color.White
-            ),
-
-            modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .height(45.dp),
-            shape = RoundedCornerShape(8.dp),
-        ) {
-
-            Icon(
-                imageVector = Icons.Rounded.Image,
-                contentDescription = "Icono de usuario"
-            )
-            Text(
-                text = "Notificaciones",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { navigateToNotifications() }
-
-            )
-        }
-        Spacer(
-            modifier = Modifier.height(20.dp)
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
+            selected = selectedIndex == 1,
+            onClick = { onItemSelected(1) }
         )
-        Button(
-            onClick = {
-                navigateToNewReportNew()
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF),
-                contentColor = Color.White
-            ),
-            modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .height(45.dp),
-            shape = RoundedCornerShape(8.dp),
-
-            ) {
-
-            Icon(
-                imageVector = Icons.Rounded.Person,
-                contentDescription = "Icono de usuario"
-            )
-
-            Text(
-                text = "Creacion de reportes",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { navigateToNewReportNew() }
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.height(20.dp)
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Menu, contentDescription = "Perfil") },
+            selected = selectedIndex == 2,
+            onClick = { onItemSelected(2) }
         )
-
-        Button(
-            onClick = {
-                navigateToDetailReports()
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0061FF), // Azul
-                contentColor = Color.White
-            ),
-            modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .height(45.dp),
-            shape = RoundedCornerShape(8.dp),
-
-            ) {
-
-            Icon(
-                imageVector = Icons.Rounded.Person,
-                contentDescription = "Icono de usuario"
-            )
-
-            Text(
-                text = "Detalles de reportes",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { navigateToDetailReports() }
-            )
-        }
-        }
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Book, contentDescription = "Nuevo reporte") },
+            selected = selectedIndex == 3,
+            onClick = { onItemSelected(3) }
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Notifications, contentDescription = "Notificaciones") },
+            selected = selectedIndex == 4,
+            onClick = { onItemSelected(4) }
+        )
     }
 }

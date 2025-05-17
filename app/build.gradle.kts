@@ -84,4 +84,8 @@ dependencies {
 
     // Activity Compose
     implementation(libs.androidx.activity.compose)
+
+    //Maps
+    implementation("com.mapbox.maps:android:11.12.0")
+    implementation("com.mapbox.extension:maps-compose:11.12.0")
 }

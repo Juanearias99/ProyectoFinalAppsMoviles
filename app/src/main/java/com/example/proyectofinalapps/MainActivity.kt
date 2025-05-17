@@ -8,8 +8,10 @@ import com.example.proyectofinalapps.ui.theme.AlertasAppTheme
 import com.example.proyectofinalapps.ui.theme.navigation.Navigation
 import com.example.proyectofinalapps.ui.theme.navigation.RouteScreen
 import com.example.proyectofinalapps.ui.theme.screen.HomeAdmin
+import com.example.proyectofinalapps.ui.theme.screen.HomeUser
 import com.example.proyectofinalapps.ui.theme.screen.PendientesVerificacion
 import com.example.proyectofinalapps.ui.theme.screen.Rechazo
+import com.example.proyectofinalapps.ui.theme.screen.ResetPassword
 import com.example.proyectofinalapps.ui.theme.screens.NewReportScreen
 import com.example.proyectofinalapps.ui.theme.screens.SelectFileScreen
 
@@ -22,13 +24,14 @@ class MainActivity : ComponentActivity() {
                 AlertasAppTheme {
                     //SelectFileScreen()
                     //LoginScreen(navigateToRegister = { }, navigateToForgotPasswordScreen = { })
+                    //HomeScreen(navigateToNewReportScreen = { }, navigateToNotification = { })
                     Navigation()
                     //DetailsReportScreeen()
                     //RegisterScreen()
                     //ForgotPasswordScreen()
                     //EmailForgotPasswordScreen()
                     //NewReportScreen()
-                    //ResetPassword()
+                    //ResetPassword(navigateToCodeVerification = {}, navigateToLoginScreenP = { })
                     //ConfarmationCode()
                     //VerificationDelete()
                     //MenuNotifications()
@@ -39,8 +42,10 @@ class MainActivity : ComponentActivity() {
                     //Rechazo()
                     //Reportes()
                     //Notification()
-                    //HomeUser()
-                    //HomeAdmin ()
+                    /*HomeUser(navigateToHomeUser = { }, navigateToProfile = { },
+                        navigateToNewReport = { }, navigateToNotifications = { },
+                        navigateToDetailReports = { } )*/
+                    //HomeAdmin (navigateToLogin = { }, navigateToNotifications = { }, navigateToMenuPendientes = { })
                     //CodeVerification()
                     //MenuReportes(navigateToMenuNotifications = {})
                 }
