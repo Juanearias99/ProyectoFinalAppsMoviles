@@ -1,25 +1,20 @@
 package com.example.proyectofinalapps.ui.theme.screens
 
-import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.rounded.PersonAdd
-import androidx.compose.material.icons.rounded.Visibility
-import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,10 +26,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinalapps.R
+import com.example.proyectofinalapps.model.Role
+import com.example.proyectofinalapps.model.User
+import com.example.proyectofinalapps.viewmodel.UserViewModel
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
+fun RegisterScreen(
+    usersViewModel: UserViewModel,
+    navigateToLoginScreenR: () -> Unit
+) {
+
     var name by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var city by remember { mutableStateOf("") }
@@ -45,6 +48,8 @@ fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
     var errorEmail by remember { mutableStateOf(false) }
     var password by remember { mutableStateOf("") }
     var errorPassword by remember { mutableStateOf(false) }
+    var confirmPassword by remember { mutableStateOf("") }
+    var errorConfirmPassword by remember { mutableStateOf(false) }
     var visibilityPassword by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
@@ -55,7 +60,7 @@ fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
                 navigationIcon = {
                     IconButton(onClick = navigateToLoginScreenR) {
                         Icon(
-                            imageVector = Icons.Outlined.ArrowBack,
+                            imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = "Volver"
                         )
                     }
@@ -85,12 +90,12 @@ fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
             ) {
                 Text(
                     text = stringResource(R.string.register_title),
-                    color = Color(0xFF1976D2),
-                    fontSize = 24.sp,
+                    color = Color.Blue,
+                    fontSize = 30.sp,
                     fontWeight = FontWeight.Bold
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(22.dp))
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -99,14 +104,30 @@ fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
                     OutlinedTextField(
                         value = name,
                         onValueChange = { name = it },
-                        label = { Text(stringResource(R.string.name_label)) },
+                        label = { Text("Nombre") },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Rounded.Person,
+                                contentDescription = null,
+                                tint = Color(0xFF1976D2)
+                            )
+                                      },
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     OutlinedTextField(
                         value = lastName,
                         onValueChange = { lastName = it },
-                        label = { Text(stringResource(R.string.lastname_label)) },
+                        label = { Text("Apellido") },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Rounded.Person,
+                                contentDescription = null,
+                                tint = Color(0xFF1976D2)
+                            )
+                                      },
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -120,7 +141,9 @@ fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
                             value = city,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text(stringResource(R.string.city_label)) },
+                            label = { Text("Ciudad") },
+                            shape = RoundedCornerShape(12.dp),
+                            leadingIcon = { Icon(Icons.Rounded.LocationOn, contentDescription = null, tint = Color(0xFF1976D2)) },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCity)
                             }
@@ -144,48 +167,69 @@ fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
                     OutlinedTextField(
                         value = address,
                         onValueChange = { address = it },
-                        label = { Text(stringResource(R.string.address_label)) },
+                        label = { Text("Dirección") },
+                        leadingIcon = { Icon(Icons.Rounded.Home, contentDescription = null, tint = Color(0xFF1976D2)) },
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text(stringResource(R.string.email_label)) },
+                        label = { Text("Correo electrónico") },
+                        leadingIcon = { Icon(Icons.Rounded.Email, contentDescription = null, tint = Color(0xFF1976D2)) },
+                        shape = RoundedCornerShape(12.dp),
+                        isError = errorEmail,
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        isError = errorEmail,
                         supportingText = {
-                            if (errorEmail) {
-                                Text(stringResource(R.string.validation_email))
-                            }else {
-                                Spacer(modifier = Modifier.height(0.dp))
-                            }
+                            if (errorEmail) Text("Correo inválido")
                         }
                     )
 
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text(stringResource(R.string.password_label)) },
-                        modifier = Modifier.fillMaxWidth(),
-                        visualTransformation = if (visibilityPassword) VisualTransformation.None
-                        else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        label = { Text("Contraseña") },
+                        leadingIcon = { Icon(Icons.Rounded.Lock, contentDescription = null, tint = Color(0xFF1976D2)) },
                         trailingIcon = {
                             IconButton(onClick = { visibilityPassword = !visibilityPassword }) {
                                 Icon(
-                                    imageVector = if (visibilityPassword) Icons.Rounded.Visibility
-                                    else Icons.Rounded.VisibilityOff,
-                                    contentDescription = stringResource(R.string.show_hide_password)
+                                    imageVector = if (visibilityPassword) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
+                                    contentDescription = null
                                 )
                             }
                         },
+                        visualTransformation = if (visibilityPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        shape = RoundedCornerShape(12.dp),
                         isError = errorPassword,
+                        modifier = Modifier.fillMaxWidth(),
                         supportingText = {
-                            if (errorPassword) {
-                                Text(stringResource(R.string.validation_password))
+                            if (errorPassword) Text("Mínimo 4 caracteres")
+                        }
+                    )
+
+                    OutlinedTextField(
+                        value = confirmPassword,
+                        onValueChange = { confirmPassword = it },
+                        label = { Text("Confirmar contraseña") },
+                        leadingIcon = { Icon(Icons.Rounded.Lock, contentDescription = null, tint = Color(0xFF1976D2)) },
+                        trailingIcon = {
+                            IconButton(onClick = { visibilityPassword = !visibilityPassword }) {
+                                Icon(
+                                    imageVector = if (visibilityPassword) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
+                                    contentDescription = null
+                                )
                             }
+                        },
+                        visualTransformation = if (visibilityPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        shape = RoundedCornerShape(12.dp),
+                        isError = errorConfirmPassword,
+                        modifier = Modifier.fillMaxWidth(),
+                        supportingText = {
+                            if (errorConfirmPassword) Text("Las contraseñas no coinciden")
                         }
                     )
                 }
@@ -194,44 +238,32 @@ fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
 
                 Button(
                     onClick = {
-                        val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-                        val isPasswordValid = password.length >= 4
-                        val isNameValid = name.isNotBlank()
-                        val isLastNameValid = lastName.isNotBlank()
-                        val isCityValid = city.isNotBlank()
-                        val isAddressValid = address.isNotBlank()
+                        errorEmail = email.isBlank()
+                        errorPassword = password.length < 4
+                        errorConfirmPassword = confirmPassword != password
 
-                        errorEmail = !isEmailValid
-                        errorPassword = !isPasswordValid
-
-                        if (
-                            isEmailValid &&
-                            isPasswordValid &&
-                            isNameValid &&
-                            isLastNameValid &&
-                            isCityValid &&
-                            isAddressValid
-                        ) {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.register_success),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        if (!errorEmail && !errorPassword && !errorConfirmPassword) {
+                            usersViewModel.create(
+                                User(
+                                    userId = UUID.randomUUID().toString(),
+                                    name = name,
+                                    lastName = lastName,
+                                    ciudad = city,
+                                    direccion = address,
+                                    email = email,
+                                    role = Role.CLIENT,
+                                    password = password,
+                                    confirmPassword = confirmPassword
+                                )
+                            )
+                            Toast.makeText(context, "Usuario Creado exitosamente", Toast.LENGTH_SHORT).show()
                             navigateToLoginScreenR()
-                        } else {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.register_error),
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
                     },
-                            modifier = Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue
-                    )
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.PersonAdd,
@@ -243,18 +275,18 @@ fun RegisterScreen(navigateToLoginScreenR: () -> Unit) {
                         color = Color.White
                     )
                 }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Image(
+                    painter = painterResource(id = R.drawable.layered_waves_haikei_reg),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                )
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.layered_waves_haikei_reg),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-            )
         }
     }
 }

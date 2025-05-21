@@ -41,10 +41,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalapps.R
+import com.example.proyectofinalapps.ui.theme.navigation.RouteScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VerificatioImport(navigateToDetailReports: () -> Unit) {
+fun VerificationImport(navigateToDetailReports: () -> Unit) {
     var password by rememberSaveable { mutableStateOf("") }
     var errorPassword by rememberSaveable { mutableStateOf(false) }
     var visibilityPassword by remember { mutableStateOf(false) }

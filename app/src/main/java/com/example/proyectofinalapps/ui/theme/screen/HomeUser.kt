@@ -5,12 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -39,28 +34,17 @@ fun HomeUser(
         Box(modifier = Modifier.weight(1f)) {
             when (selectedIndex) {
                 0 -> MapScreen()
-                1 -> HomeUserScreen(navigateToHomeUser)
-                2 -> ProfileScreen(navigateToProfile)
-                3 -> NewReportScreen(navigateToNewReport)
-                4 -> NotificationScreen(navigateToNotifications)
-                5 -> DetailReportsScreen(navigateToDetailReports)
-
+                1 -> NewReportScreen(navigateToNewReport)
+                2 -> NotificationScreen(navigateToNotifications)
+                3 -> ProfileScreen(navigateToProfile)
             }
         }
 
         BottomNavigationBar(
             selectedIndex = selectedIndex,
-            onItemSelected = {  selectedIndex = it }
+            onItemSelected = { selectedIndex = it }
         )
     }
-}
-
-@Composable
-fun ReportMaxPage(
-    context: Context
-){
-
-
 }
 
 @Composable
@@ -84,10 +68,7 @@ fun MapScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         MapboxMap(
             modifier = Modifier.fillMaxSize(),
-            mapViewportState = mapViewportState,
-            //mapState = rememberMapState{
-              //  gesturesSettings = GesturesSettings{pitchEnabled = true }
-            //}
+            mapViewportState = mapViewportState
         ) {
             PointAnnotation(point = Point.fromLngLat(-75.7358251, 4.4721139)) {
                 iconImage = marker
@@ -97,14 +78,20 @@ fun MapScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
-                .background(Color.White, shape = RoundedCornerShape(12.dp))
-                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp)
+                .padding(top = 30.dp)
+                .background(Color.White, shape = RoundedCornerShape(24.dp))
+                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .align(Alignment.TopCenter),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menú")
-            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "SAFE",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
 
             TextField(
                 value = searchQuery,
@@ -112,37 +99,25 @@ fun MapScreen() {
                 placeholder = { Text("Buscar...") },
                 modifier = Modifier
                     .weight(1f)
-                    .height(48.dp),
-                singleLine = true
+                    .height(56.dp),
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(imageVector = Icons.Default.Search, contentDescription = "Buscar")
+            IconButton(onClick = { /* acción buscar */ }) {
+                Icon(Icons.Default.Search, contentDescription = "Buscar")
+            }
+
+            IconButton(onClick = { /* acción logout */ }) {
+                Icon(Icons.Default.Logout, contentDescription = "Cerrar sesión")
+            }
         }
-    }
-}
-
-@Composable
-fun HomeUserScreen(navigateTo: () -> Unit) {
-    Button(
-        onClick = navigateTo,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-
-    }
-}
-
-@Composable
-fun ProfileScreen(navigateToProfile: () -> Unit) {
-    Button(
-        onClick = navigateToProfile,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text("Ir al perfil")
     }
 }
 
@@ -150,9 +125,7 @@ fun ProfileScreen(navigateToProfile: () -> Unit) {
 fun NewReportScreen(navigateToNewReport: () -> Unit) {
     Button(
         onClick = navigateToNewReport,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
         Text("Ir a nuevo reporte")
     }
@@ -162,23 +135,19 @@ fun NewReportScreen(navigateToNewReport: () -> Unit) {
 fun NotificationScreen(navigateToNotifications: () -> Unit) {
     Button(
         onClick = navigateToNotifications,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
         Text("Ir a notificaciones")
     }
 }
 
 @Composable
-fun DetailReportsScreen(navigateToDetailReports: () -> Unit) {
+fun ProfileScreen(navigateToProfile: () -> Unit) {
     Button(
-        onClick = navigateToDetailReports,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        onClick = navigateToProfile,
+        modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
-        Text("Ir a Detalles De Reportes")
+        Text("Ir al perfil")
     }
 }
 
@@ -187,31 +156,37 @@ fun BottomNavigationBar(
     selectedIndex: Int,
     onItemSelected: (Int) -> Unit
 ) {
-    NavigationBar {
+    NavigationBar(
+        containerColor = Color.White,
+        tonalElevation = 4.dp
+    ) {
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Person, contentDescription = "Mapa") },
             selected = selectedIndex == 0,
-            onClick = { onItemSelected(0) }
-        )
-        NavigationBarItem(
+            onClick = { onItemSelected(0) },
             icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
+            label = { Text("Inicio") },
+            alwaysShowLabel = true
+        )
+        NavigationBarItem(
             selected = selectedIndex == 1,
-            onClick = { onItemSelected(1) }
+            onClick = { onItemSelected(1) },
+            icon = { Icon(Icons.Default.Book, contentDescription = "Reportes") },
+            label = { Text("Reportes") },
+            alwaysShowLabel = true
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Menu, contentDescription = "Perfil") },
             selected = selectedIndex == 2,
-            onClick = { onItemSelected(2) }
-        )
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Book, contentDescription = "Nuevo reporte") },
-            selected = selectedIndex == 3,
-            onClick = { onItemSelected(3) }
-        )
-        NavigationBarItem(
+            onClick = { onItemSelected(2) },
             icon = { Icon(Icons.Default.Notifications, contentDescription = "Notificaciones") },
-            selected = selectedIndex == 4,
-            onClick = { onItemSelected(4) }
+            label = { Text("Notificación") },
+            alwaysShowLabel = true
+        )
+        NavigationBarItem(
+            selected = selectedIndex == 3,
+            onClick = { onItemSelected(3) },
+            icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
+            label = { Text("Perfil") },
+            alwaysShowLabel = true
         )
     }
 }

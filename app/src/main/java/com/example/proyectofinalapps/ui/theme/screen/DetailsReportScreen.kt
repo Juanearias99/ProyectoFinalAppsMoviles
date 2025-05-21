@@ -46,7 +46,7 @@ import com.example.proyectofinalapps.ui.theme.components.TextFieldForm
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsReportScreeen(
+fun DetailsReportScreen(
     navigateToHomeUser: () -> Unit,
     navigateToComentarios: () -> Unit,
     navigateToVerificationImport: () -> Unit,

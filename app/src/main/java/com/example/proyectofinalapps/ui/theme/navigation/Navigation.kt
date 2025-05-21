@@ -1,11 +1,13 @@
 package com.example.proyectofinalapps.ui.theme.navigation
 
+import android.util.Log
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
+import com.example.proyectofinalapps.model.Role
 import com.example.proyectofinalapps.ui.theme.screen.CodeVerification
 import com.example.proyectofinalapps.ui.theme.screen.Comentarios
 import com.example.proyectofinalapps.ui.theme.screen.HomeAdmin
@@ -16,48 +18,75 @@ import com.example.proyectofinalapps.ui.theme.screen.Notification
 import com.example.proyectofinalapps.ui.theme.screen.PendientesVerificacion
 import com.example.proyectofinalapps.ui.theme.screen.Profile
 import com.example.proyectofinalapps.ui.theme.screen.Rechazo
-import com.example.proyectofinalapps.ui.theme.screen.VerificatioImport
+import com.example.proyectofinalapps.ui.theme.screen.ResetPassword
+import com.example.proyectofinalapps.ui.theme.screen.VerificationImport
 import com.example.proyectofinalapps.ui.theme.screen.VerificationDelete
 import com.example.proyectofinalapps.ui.theme.screen.VerificationResult
-import com.example.proyectofinalapps.ui.theme.screens.DetailsReportScreeen
+import com.example.proyectofinalapps.ui.theme.screens.DetailsReportScreen
 import com.example.proyectofinalapps.ui.theme.screens.EmailForgotPasswordScreen
 import com.example.proyectofinalapps.ui.theme.screens.LoginScreen
 import com.example.proyectofinalapps.ui.theme.screens.NewReportScreen
 import com.example.proyectofinalapps.ui.theme.screens.RegisterScreen
+import com.example.proyectofinalapps.utils.SharedPreferencesUtils
+import com.example.proyectofinalapps.viewmodel.UserViewModel
+
 
 @Composable
-fun Navigation() {
-
+fun Navigation(
+    usersViewModel: UserViewModel
+) {
+    val context = LocalContext.current
     val navController = rememberNavController()
+    val user = SharedPreferencesUtils.getPreference(context)
+
+    var startDestination: RouteScreen = RouteScreen.LoginScreen
+
+    if (!user.isEmpty()){
+        val roleString = user["role"] as String
+        val role = Role.valueOf(roleString)
+
+        Log.d("USER_ROLE", role.toString())
+
+        startDestination = if (role == Role.ADMIN) {
+            RouteScreen.HomeAdmin
+        } else {
+            RouteScreen.HomeUser
+        }
+
+
+    }
 
     Surface {
 
         NavHost(
             navController = navController,
-            startDestination = RouteScreen.LoginScreen
+            startDestination = startDestination
+
         ) {
 
             composable<RouteScreen.LoginScreen> {
                 LoginScreen(
+                    usersViewModel = usersViewModel,
                     navigateToRegister = { navController.navigate(RouteScreen.RegisterScreen) },
-                    navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
                     navigateToEmailForgotPassword = { navController.navigate(RouteScreen.EmailForgotPasswordScreen) },
-                    naviagteToHomeAdmin = { navController.navigate(RouteScreen.HomeAdmin) }
+                    onLoginSuccess = { navController.navigate(RouteScreen.HomeUser) }
                 )
             }
 
             composable<RouteScreen.RegisterScreen> {
                 RegisterScreen(
+                    usersViewModel = usersViewModel,
                     navigateToLoginScreenR = { navController.navigate(RouteScreen.LoginScreen) }
                 )
             }
 
-            /*composable<RouteScreen.ResetPasswordScreen> {
+            composable<RouteScreen.ResetPasswordScreen> {
                 ResetPassword(
                     navigateToCodeVerification = { navController.navigate(RouteScreen.CodeVerification) },
-                    navigateToLoginScreenP = { navController.navigate(RouteScreen.LoginScreen) }
+                    navigateToLoginScreenP = { navController.navigate(RouteScreen.LoginScreen) },
+                    navigateToHomeScreen = { navController.navigate(RouteScreen.HomeUser) }
                 )
-            }*/
+            }
 
             composable<RouteScreen.HomeUser> {
                 HomeUser(
@@ -90,7 +119,7 @@ fun Navigation() {
             }
 
             composable<RouteScreen.DetailReportsScreen> {
-                DetailsReportScreeen(
+                DetailsReportScreen(
                     navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) },
                     navigateToComentarios = { navController.navigate(RouteScreen.Comentarios) },
                     navigateToVerificationImport = { navController.navigate(RouteScreen.VerificationImport) },
@@ -134,10 +163,11 @@ fun Navigation() {
             }
 
             composable<RouteScreen.VerificationImport> {
-                VerificatioImport(
+                VerificationImport(
                     navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen) }
                 )
             }
+
 
             composable<RouteScreen.VerificationResult> {
                 VerificationResult(
@@ -173,11 +203,6 @@ fun Navigation() {
                 )
             }
 
-            composable<RouteScreen.RegisterScreen> {
-                RegisterScreen(
-                    navigateToLoginScreenR = { navController.navigate(RouteScreen.LoginScreen) }
-                )
-            }
         }
     }
 }
