@@ -1,6 +1,5 @@
 package com.example.proyectofinalapps.ui.theme.screen
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,14 +25,14 @@ fun HomeUser(
     navigateToProfile: () -> Unit,
     navigateToNewReport: () -> Unit,
     navigateToNotifications: () -> Unit,
-    navigateToDetailReports: () -> Unit
+    logout: () -> Unit
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
             when (selectedIndex) {
-                0 -> MapScreen()
+                0 -> MapScreen(onLogout = logout)
                 1 -> NewReportScreen(navigateToNewReport)
                 2 -> NotificationScreen(navigateToNotifications)
                 3 -> ProfileScreen(navigateToProfile)
@@ -48,7 +47,7 @@ fun HomeUser(
 }
 
 @Composable
-fun MapScreen() {
+fun MapScreen(onLogout: () -> Unit) {
     val mapViewportState = rememberMapViewportState {
         setCameraOptions {
             zoom(8.0)
@@ -57,19 +56,12 @@ fun MapScreen() {
         }
     }
 
-    val markerResourceId = R.drawable.red_marker
-    val marker = rememberIconImage(
-        key = markerResourceId,
-        painter = painterResource(markerResourceId)
-    )
-
+    val markerId = R.drawable.red_marker
+    val marker = rememberIconImage(markerId, painter = painterResource(markerId))
     var searchQuery by remember { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        MapboxMap(
-            modifier = Modifier.fillMaxSize(),
-            mapViewportState = mapViewportState
-        ) {
+        MapboxMap(modifier = Modifier.fillMaxSize(), mapViewportState = mapViewportState) {
             PointAnnotation(point = Point.fromLngLat(-75.7358251, 4.4721139)) {
                 iconImage = marker
             }
@@ -78,43 +70,31 @@ fun MapScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(top = 30.dp)
+                .padding(16.dp)
                 .background(Color.White, shape = RoundedCornerShape(24.dp))
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .align(Alignment.TopCenter),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "SAFE",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
+            Text("SAFE", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.width(12.dp))
             TextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 placeholder = { Text("Buscar...") },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(56.dp),
+                modifier = Modifier.weight(1f).height(56.dp),
                 singleLine = true,
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 )
             )
-
             IconButton(onClick = { /* acción buscar */ }) {
                 Icon(Icons.Default.Search, contentDescription = "Buscar")
             }
-
-            IconButton(onClick = { /* acción logout */ }) {
+            IconButton(onClick = onLogout) {
                 Icon(Icons.Default.Logout, contentDescription = "Cerrar sesión")
             }
         }
@@ -123,70 +103,57 @@ fun MapScreen() {
 
 @Composable
 fun NewReportScreen(navigateToNewReport: () -> Unit) {
-    Button(
-        onClick = navigateToNewReport,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
-    ) {
-        Text("Ir a nuevo reporte")
+    Surface(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Button(onClick = navigateToNewReport) {
+            Text("Ir a nuevo reporte")
+        }
     }
 }
 
 @Composable
 fun NotificationScreen(navigateToNotifications: () -> Unit) {
-    Button(
-        onClick = navigateToNotifications,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
-    ) {
-        Text("Ir a notificaciones")
+    Surface(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Button(onClick = navigateToNotifications) {
+            Text("Ir a notificaciones")
+        }
     }
 }
 
 @Composable
 fun ProfileScreen(navigateToProfile: () -> Unit) {
-    Button(
-        onClick = navigateToProfile,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
-    ) {
-        Text("Ir al perfil")
+    Surface(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Button(onClick = navigateToProfile) {
+            Text("Ir al perfil")
+        }
     }
 }
 
 @Composable
-fun BottomNavigationBar(
-    selectedIndex: Int,
-    onItemSelected: (Int) -> Unit
-) {
-    NavigationBar(
-        containerColor = Color.White,
-        tonalElevation = 4.dp
-    ) {
+fun BottomNavigationBar(selectedIndex: Int, onItemSelected: (Int) -> Unit) {
+    NavigationBar(containerColor = Color.White, tonalElevation = 4.dp) {
         NavigationBarItem(
             selected = selectedIndex == 0,
             onClick = { onItemSelected(0) },
             icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
-            label = { Text("Inicio") },
-            alwaysShowLabel = true
+            label = { Text("Inicio") }
         )
         NavigationBarItem(
             selected = selectedIndex == 1,
             onClick = { onItemSelected(1) },
             icon = { Icon(Icons.Default.Book, contentDescription = "Reportes") },
-            label = { Text("Reportes") },
-            alwaysShowLabel = true
+            label = { Text("Reportes") }
         )
         NavigationBarItem(
             selected = selectedIndex == 2,
             onClick = { onItemSelected(2) },
             icon = { Icon(Icons.Default.Notifications, contentDescription = "Notificaciones") },
-            label = { Text("Notificación") },
-            alwaysShowLabel = true
+            label = { Text("Notificación") }
         )
         NavigationBarItem(
             selected = selectedIndex == 3,
             onClick = { onItemSelected(3) },
             icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
-            label = { Text("Perfil") },
-            alwaysShowLabel = true
+            label = { Text("Perfil") }
         )
     }
 }

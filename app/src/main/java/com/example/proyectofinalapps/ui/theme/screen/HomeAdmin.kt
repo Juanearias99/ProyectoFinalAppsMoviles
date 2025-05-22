@@ -1,162 +1,376 @@
 package com.example.proyectofinalapps.ui.theme.screen
 
-import android.content.Context
-import android.icu.text.AlphabeticIndex
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.AdminPanelSettings
+import androidx.compose.material.icons.rounded.Dashboard
+import androidx.compose.material.icons.rounded.List
+import androidx.compose.material.icons.rounded.NotificationsActive
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyectofinalapps.R
-import com.example.proyectofinalapps.model.Notification
-import com.example.proyectofinalapps.ui.theme.navigation.RouteScreen
-import com.example.proyectofinalapps.ui.theme.screens.LoginScreen
-import com.mapbox.geojson.Point
-import com.mapbox.maps.extension.compose.MapboxMap
-import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
-import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
-import com.mapbox.maps.extension.compose.annotation.rememberIconImage
-import com.mapbox.maps.plugin.gestures.generated.GesturesSettings
+import com.example.proyectofinalapps.utils.SharedPreferencesUtils
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeAdmin(
     navigateToLogin: () -> Unit,
     navigateToNotifications: () -> Unit,
-    navigateToMenuPendientes: () -> Unit
+    navigateToMenuPendientes: () -> Unit,
+    logout: () -> Unit
 ) {
+    val context = LocalContext.current
+    BackHandler { logout() }
 
-    var selectedIndex by remember { mutableStateOf(0) }
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.weight(1f)) {
-            when (selectedIndex) {
-                0 -> MapScreen()
-                1 -> LoginScreen(navigateToLogin)
-                2 -> NotificationScreen(navigateToNotifications)
-                3 -> MenuPendientes(navigateToMenuPendientes)
-            }
+    AdminDashboard(
+        onNavigatePendientes = navigateToMenuPendientes,
+        onNavigateNotifications = navigateToNotifications,
+        onLogout = {
+            SharedPreferencesUtils.clearPreference(context)
+            navigateToLogin()
         }
-
-        BottomNavigationBar(
-            selectedIndex = selectedIndex,
-            onItemSelected = { selectedIndex = it })
-    }
-}
-
-@Composable
-fun reportMaxPage(
-    context: Context
-) {
-}
-
-@Composable
-fun MapScreenAdmin() {
-    val mapViewportState = rememberMapViewportState {
-        setCameraOptions {
-            zoom(8.0)
-            center(Point.fromLngLat(-75.7358251, 4.4721139))
-            pitch(45.0)
-        }
-    }
-
-    val markerResourceId = R.drawable.red_marker
-    val marker = rememberIconImage(
-        key = markerResourceId,
-        painter = painterResource(markerResourceId)
     )
+}
 
-    var searchQuery by remember { mutableStateOf("") }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AdminDashboard(
+    onNavigatePendientes: () -> Unit,
+    onNavigateNotifications: () -> Unit,
+    onLogout: () -> Unit
+) {
+    val animatedItems = remember { mutableStateListOf(false, false, false, false) }
+    val scope = rememberCoroutineScope()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        MapboxMap(
-            modifier = Modifier.fillMaxSize(),
-            mapViewportState = mapViewportState
-        ) {
-            PointAnnotation(point = Point.fromLngLat(-75.7358251, 4.4721139)) {
-                iconImage = marker
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            animatedItems.forEachIndexed { index, _ ->
+                delay(100L * index)
+                animatedItems[index] = true
             }
         }
+    }
 
-        Row(
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.AdminPanelSettings,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(28.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Panel Administrativo",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                modifier = Modifier.shadow(4.dp)
+            )
+        }
+    ) { paddingValues ->
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .background(Color.White, shape = RoundedCornerShape(12.dp))
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-                .align(Alignment.TopCenter),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-            Spacer(modifier = Modifier.width(8.dp))
-
-            TextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                placeholder = { Text("Buscar..") },
+            Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp),
-                singleLine = true
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFFF8F9FA),
+                                Color(0xFFE9ECEF)
+                            )
+                        )
+                    )
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
-            Icon(imageVector = Icons.Default.Search, contentDescription = "Buscar")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Admin status card
+                AnimatedVisibility(
+                    visible = animatedItems[0],
+                    enter = fadeIn() + slideInVertically(
+                        initialOffsetY = { -40 },
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+                    ),
+                    exit = fadeOut()
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 24.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f)
+                        ),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.AccountCircle,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(40.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(16.dp))
+
+                            Column {
+                                Text(
+                                    text = "Administrador",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                                Text(
+                                    text = "Acceso completo al sistema",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Dashboard label
+                AnimatedVisibility(
+                    visible = animatedItems[1],
+                    enter = fadeIn() + slideInVertically(
+                        initialOffsetY = { -40 },
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+                    ),
+                    exit = fadeOut()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Dashboard,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Acciones Principales",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
+
+                // Main action cards
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    // Pendientes Card
+                    AnimatedVisibility(
+                        visible = animatedItems[2],
+                        enter = fadeIn() + slideInVertically(
+                            initialOffsetY = { 100 },
+                            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+                        ),
+                        exit = fadeOut(),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        ModernAdminCard(
+                            icon = Icons.Rounded.List,
+                            title = "Pendientes",
+                            description = "Verificación de solicitudes",
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            iconTint = MaterialTheme.colorScheme.secondary,
+                            textColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            onClick = onNavigatePendientes
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+
+                    AnimatedVisibility(
+                        visible = animatedItems[2],
+                        enter = fadeIn() + slideInVertically(
+                            initialOffsetY = { 100 },
+                            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+                        ),
+                        exit = fadeOut(),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        ModernAdminCard(
+                            icon = Icons.Rounded.NotificationsActive,
+                            title = "Notificaciones",
+                            description = "Gestionar avisos",
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            iconTint = MaterialTheme.colorScheme.tertiary,
+                            textColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                            onClick = onNavigateNotifications
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+
+                AnimatedVisibility(
+                    visible = animatedItems[3],
+                    enter = fadeIn() + slideInVertically(
+                        initialOffsetY = { 40 },
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+                    ),
+                    exit = fadeOut()
+                ) {
+                    ElevatedButton(
+                        onClick = onLogout,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = Color.White,
+                            contentColor = MaterialTheme.colorScheme.error
+                        ),
+                        elevation = ButtonDefaults.elevatedButtonElevation(4.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ExitToApp,
+                            contentDescription = "Cerrar sesión"
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Cerrar Sesión",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }
 
 @Composable
-fun LoginScreen(navigateTo: () -> Unit) {
-    Button(
-        onClick = navigateTo,
+fun ModernAdminCard(
+    icon: ImageVector,
+    title: String,
+    description: String,
+    containerColor: Color,
+    iconTint: Color,
+    textColor: Color,
+    onClick: () -> Unit
+) {
+    Card(
+        onClick = onClick,
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-
+            .fillMaxWidth()
+            .height(160.dp),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(iconTint.copy(alpha = 0.2f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = iconTint,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            Column {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = textColor,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = textColor.copy(alpha = 0.7f)
+                )
+            }
+        }
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-fun NotificationsScreen(navigateToNotifications: () -> Unit) {
-    Button(
-        onClick = navigateToNotifications,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(text = "Ir a las notificaciones")
+fun PreviewModernAdminDashboard() {
+    MaterialTheme {
+        AdminDashboard(
+            onNavigatePendientes = {},
+            onNavigateNotifications = {},
+            onLogout = {}
+        )
     }
 }
-
-@Composable
-fun MenuPendientes(navigateToMenuPendientes: () -> Unit) {
-    Button(
-        onClick = navigateToMenuPendientes,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-
-    ) {
-        Text(text = "Ir al Menu Pendientes")
-    }
-}
-

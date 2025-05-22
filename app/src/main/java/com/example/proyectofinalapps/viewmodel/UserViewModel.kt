@@ -42,7 +42,7 @@ class UserViewModel: ViewModel() {
                 "Rojas",
                 "Armenia",
                 "Calle 123",
-                "olivers@email.com",
+                "user@gmail.com",
                 Role.CLIENT,
                 "123456",
                 "123456"
@@ -53,10 +53,10 @@ class UserViewModel: ViewModel() {
                 "Martínez",
                 "Armenia",
                 "Av. Bolivar 456",
-                "juana@email.com",
+                "admin@gmail.com",
                 Role.ADMIN,
-                "abcdef",
-                "abcdef"
+                "654321",
+                "654321"
             )
         )
     }

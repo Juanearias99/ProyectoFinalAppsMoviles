@@ -67,11 +67,22 @@ fun Navigation(
             composable<RouteScreen.LoginScreen> {
                 LoginScreen(
                     usersViewModel = usersViewModel,
-                    navigateToRegister = { navController.navigate(RouteScreen.RegisterScreen) },
-                    navigateToEmailForgotPassword = { navController.navigate(RouteScreen.EmailForgotPasswordScreen) },
-                    onLoginSuccess = { navController.navigate(RouteScreen.HomeUser) }
+                    navigateToRegister = {
+                        navController.navigate(RouteScreen.RegisterScreen)
+                    },
+                    navigateToEmailForgotPassword = {
+                        navController.navigate(RouteScreen.EmailForgotPasswordScreen)
+                    },
+                    navigateToHomeScreen = { role ->
+                        if (role == Role.ADMIN) {
+                            navController.navigate(RouteScreen.HomeAdmin)
+                        } else {
+                            navController.navigate(RouteScreen.HomeUser)
+                        }
+                    }
                 )
             }
+
 
             composable<RouteScreen.RegisterScreen> {
                 RegisterScreen(
@@ -94,7 +105,10 @@ fun Navigation(
                     navigateToProfile = { navController.navigate(RouteScreen.Profile) },
                     navigateToNewReport = { navController.navigate(RouteScreen.NewReportScreen) },
                     navigateToNotifications = { navController.navigate(RouteScreen.Notification) },
-                    navigateToDetailReports = { navController.navigate(RouteScreen.DetailReportsScreen) }
+                    logout = {
+                        SharedPreferencesUtils.clearPreference(context)
+                        navController.navigate(RouteScreen.LoginScreen)
+                    }
                 )
             }
 
@@ -179,7 +193,11 @@ fun Navigation(
                 HomeAdmin(
                     navigateToLogin = { navController.navigate(RouteScreen.LoginScreen)},
                     navigateToNotifications = {navController.navigate(RouteScreen.Notification)},
-                    navigateToMenuPendientes = { navController.navigate( RouteScreen.Notification)}
+                    navigateToMenuPendientes = { navController.navigate( RouteScreen.Notification)},
+                    logout = {
+                        SharedPreferencesUtils.clearPreference(context)
+                        navController.navigate(RouteScreen.LoginScreen)
+                    }
                 )
             }
 
