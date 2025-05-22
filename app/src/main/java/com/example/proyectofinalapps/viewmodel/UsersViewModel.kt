@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
 
-class UserViewModel: ViewModel() {
+class UsersViewModel: ViewModel() {
 
     private val _users = MutableStateFlow(emptyList<User>())
     val users: StateFlow< List<User> > = _users.asStateFlow()

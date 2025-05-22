@@ -31,10 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinalapps.R
 import com.example.proyectofinalapps.model.Role
-import com.example.proyectofinalapps.model.User
-import com.example.proyectofinalapps.ui.theme.navigation.RouteScreen
+import com.example.proyectofinalapps.ui.theme.navigation.LocalMainViewModel
 import com.example.proyectofinalapps.utils.SharedPreferencesUtils
-import com.example.proyectofinalapps.viewmodel.UserViewModel
+import com.example.proyectofinalapps.viewmodel.UsersViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,20 +41,22 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    usersViewModel: UserViewModel,
     navigateToRegister: () -> Unit,
     navigateToEmailForgotPassword: () -> Unit,
     navigateToHomeScreen: (Role) -> Unit
 ) {
+
+    val usersViewModel = LocalMainViewModel.current.usersViewModel
+
     var email by rememberSaveable { mutableStateOf("") }
     var errorEmail by rememberSaveable { mutableStateOf(false) }
     var password by rememberSaveable { mutableStateOf("") }
     var errorPassword by rememberSaveable { mutableStateOf(false) }
     var visibilityPassword by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) } // Estado de carga
+    var isLoading by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val scope = rememberCoroutineScope() // Para manejar corrutinas
+    val scope = rememberCoroutineScope()
 
     Scaffold { padding ->
         Box(
@@ -229,10 +230,9 @@ fun LoginScreen(
                         .height(48.dp),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-                    enabled = !isLoading // Deshabilitar botón durante carga
+                    enabled = !isLoading
                 ) {
                     if (isLoading) {
-                        // Mostrar indicador de carga
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
                             color = Color.White,

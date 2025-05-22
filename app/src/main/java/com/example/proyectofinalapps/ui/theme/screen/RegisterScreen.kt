@@ -28,15 +28,17 @@ import androidx.compose.ui.unit.sp
 import com.example.proyectofinalapps.R
 import com.example.proyectofinalapps.model.Role
 import com.example.proyectofinalapps.model.User
-import com.example.proyectofinalapps.viewmodel.UserViewModel
+import com.example.proyectofinalapps.ui.theme.navigation.LocalMainViewModel
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    usersViewModel: UserViewModel,
     navigateToLoginScreenR: () -> Unit
 ) {
+
+    val context = LocalContext.current
+    val usersViewModel = LocalMainViewModel.current.usersViewModel
 
     var name by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -51,7 +53,6 @@ fun RegisterScreen(
     var confirmPassword by remember { mutableStateOf("") }
     var errorConfirmPassword by remember { mutableStateOf(false) }
     var visibilityPassword by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
     Scaffold(
         topBar = {
