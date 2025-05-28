@@ -1,22 +1,31 @@
-package com.example.proyectofinalapps.ui.theme.screen
-
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.proyectofinalapps.R
+import com.example.proyectofinalapps.model.Report
+import com.example.proyectofinalapps.ui.theme.components.Map
 import com.mapbox.geojson.Point
-import com.mapbox.maps.extension.compose.MapboxMap
-import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
-import com.mapbox.maps.extension.compose.annotation.rememberIconImage
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 
 @Composable
@@ -50,60 +59,40 @@ fun HomeUser(
 fun MapScreen(onLogout: () -> Unit) {
     val mapViewportState = rememberMapViewportState {
         setCameraOptions {
-            zoom(8.0)
-            center(Point.fromLngLat(-75.7358251, 4.4721139))
-            pitch(45.0)
+            zoom(7.0)
+            center(Point.fromLngLat(-75.6491181, 4.4687891))
         }
     }
 
-    val markerId = R.drawable.red_marker
-    val marker = rememberIconImage(markerId, painter = painterResource(markerId))
-    var searchQuery by remember { mutableStateOf("") }
-
     Box(modifier = Modifier.fillMaxSize()) {
-        MapboxMap(modifier = Modifier.fillMaxSize(), mapViewportState = mapViewportState) {
-            PointAnnotation(point = Point.fromLngLat(-75.7358251, 4.4721139)) {
-                iconImage = marker
-            }
-        }
+        Map(
+            modifier = Modifier.fillMaxSize(),
+            mapViewportState = mapViewportState,
+            centerUserLocation = true,
+            reports = listOf<Report>(),
+            onNavigateToDetail = { }
+        )
 
-        Row(
+        Button(
+            onClick = onLogout,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .background(Color.White, shape = RoundedCornerShape(24.dp))
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .align(Alignment.TopCenter),
-            verticalAlignment = Alignment.CenterVertically
+                .align(Alignment.TopEnd)
+                .padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
         ) {
-            Text("SAFE", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-            Spacer(Modifier.width(12.dp))
-            TextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                placeholder = { Text("Buscar...") },
-                modifier = Modifier.weight(1f).height(56.dp),
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
-            )
-            IconButton(onClick = { /* acción buscar */ }) {
-                Icon(Icons.Default.Search, contentDescription = "Buscar")
-            }
-            IconButton(onClick = onLogout) {
-                Icon(Icons.Default.Logout, contentDescription = "Cerrar sesión")
-            }
+            Text("Cerrar Sesión", color = Color.White)
         }
     }
 }
 
+
 @Composable
 fun NewReportScreen(navigateToNewReport: () -> Unit) {
-    Surface(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Button(onClick = navigateToNewReport) {
             Text("Ir a nuevo reporte")
         }
@@ -112,7 +101,11 @@ fun NewReportScreen(navigateToNewReport: () -> Unit) {
 
 @Composable
 fun NotificationScreen(navigateToNotifications: () -> Unit) {
-    Surface(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Button(onClick = navigateToNotifications) {
             Text("Ir a notificaciones")
         }
@@ -121,7 +114,11 @@ fun NotificationScreen(navigateToNotifications: () -> Unit) {
 
 @Composable
 fun ProfileScreen(navigateToProfile: () -> Unit) {
-    Surface(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Button(onClick = navigateToProfile) {
             Text("Ir al perfil")
         }

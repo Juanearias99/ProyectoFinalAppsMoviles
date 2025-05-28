@@ -233,7 +233,8 @@ fun DetailsReportScreen(
             }
         }
     }
-
 }
+
+
 
 

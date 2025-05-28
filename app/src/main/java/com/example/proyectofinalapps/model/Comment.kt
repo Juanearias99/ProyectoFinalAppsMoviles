@@ -6,7 +6,7 @@ class Comment(
     var idComentario: String,
     var contenido: String,
     var fechaCreacion: Date,
-    var idUsuario: User,
-    var idReporte: Report
+    var idUsuario: String,
+    var idReporte: String
 ) {
 }

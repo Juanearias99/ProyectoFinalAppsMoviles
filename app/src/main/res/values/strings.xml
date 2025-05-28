@@ -97,4 +97,6 @@
     <string name="Titulo_Importancia">Importancia</string>
     <string name="Map_Admin">Mapa Admin</string>
     <string name="Titulo_Pendiente">lista de pendientes</string>
+    <string name="login_not_found">Usuario no encontrado en la base de datos</string>
+
 </resources>

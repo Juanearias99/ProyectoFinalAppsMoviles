@@ -30,12 +30,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinalapps.R
-import com.example.proyectofinalapps.model.Role
-import com.example.proyectofinalapps.model.User
-import com.example.proyectofinalapps.ui.theme.navigation.RouteScreen
-import com.example.proyectofinalapps.utils.SharedPreferencesUtils
+import com.example.proyectofinalapps.ui.theme.components.AlertMessage
+import com.example.proyectofinalapps.ui.theme.components.AlertType
+import com.example.proyectofinalapps.utils.RequestResult
 import com.example.proyectofinalapps.viewmodel.UserViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -45,7 +45,7 @@ fun LoginScreen(
     usersViewModel: UserViewModel,
     navigateToRegister: () -> Unit,
     navigateToEmailForgotPassword: () -> Unit,
-    navigateToHomeScreen: (Role) -> Unit
+    navigateToHomeScreen: () -> Unit
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var errorEmail by rememberSaveable { mutableStateOf(false) }
@@ -53,10 +53,37 @@ fun LoginScreen(
     var errorPassword by rememberSaveable { mutableStateOf(false) }
     var visibilityPassword by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) } // Estado de carga
-
+    val currentUser by usersViewModel.currentUser.collectAsState()
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val scope = rememberCoroutineScope() // Para manejar corrutinas
+    val registerResult by usersViewModel.registerResult.collectAsState()
+    val loginResult by usersViewModel.registerResult.collectAsState()
 
+    LaunchedEffect(loginResult) {
+        when (loginResult) {
+            is RequestResult.Success -> {
+                if (currentUser != null) {
+                    Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
+                    delay(1000)
+                    navigateToHomeScreen()
+                } else {
+                    Toast.makeText(context, "Usuario no encontrado", Toast.LENGTH_SHORT).show()
+                }
+                usersViewModel.resetRegisterResult()
+            }
+
+            is RequestResult.Failure -> {
+                Toast.makeText(
+                    context,
+                    (loginResult as RequestResult.Failure).errorMessage,
+                    Toast.LENGTH_SHORT
+                ).show()
+                usersViewModel.resetRegisterResult()
+            }
+
+            else -> {}
+        }
+    }
     Scaffold { padding ->
         Box(
             modifier = Modifier
@@ -150,7 +177,8 @@ fun LoginScreen(
                         )
                     },
                     trailingIcon = {
-                        val image = if (visibilityPassword) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
+                        val image =
+                            if (visibilityPassword) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
                         IconButton(onClick = { visibilityPassword = !visibilityPassword }) {
                             Icon(
                                 imageVector = image,
@@ -159,6 +187,42 @@ fun LoginScreen(
                         }
                     }
                 )
+
+//                LaunchedEffect(registerResult) {
+                when (registerResult) {
+                    null -> {
+                    }
+
+                    is RequestResult.Loading -> {
+                        LinearProgressIndicator()
+                    }
+
+                    is RequestResult.Success -> {
+                        AlertMessage(
+                            modifier = Modifier.padding(end = 16.dp, start = 16.dp),
+                            type = AlertType.SUCESS,
+                            message = (registerResult as RequestResult.Success).message
+                        )
+                        LaunchedEffect(Unit) {
+                            delay(2000)
+                            navigateToHomeScreen()
+                            usersViewModel.resetRegisterResult()
+                        }
+                    }
+
+                    is RequestResult.Failure -> {
+                        AlertMessage(
+                            modifier = Modifier.padding(end = 16.dp, start = 16.dp),
+                            type = AlertType.ERROR,
+                            message = (registerResult as RequestResult.Failure).errorMessage
+                        )
+                        LaunchedEffect(Unit) {
+                            delay(4000)
+                            usersViewModel.resetRegisterResult()
+                        }
+                    }
+                }
+
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -183,12 +247,20 @@ fun LoginScreen(
                         if (!isLoading) {
                             // Validar campos antes de proceder
                             if (email.isBlank() || password.isBlank()) {
-                                Toast.makeText(context, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Por favor completa todos los campos",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@Button
                             }
 
                             if (errorEmail || errorPassword) {
-                                Toast.makeText(context, "Por favor corrige los errores", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Por favor corrige los errores",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@Button
                             }
 
@@ -203,21 +275,28 @@ fun LoginScreen(
 
                                     // Volver al hilo principal para actualizar UI
                                     if (user == null) {
-                                        Toast.makeText(context, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            "Credenciales inválidas",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     } else {
-                                        Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            "Bienvenido",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
 
-                                        // Guardar preferencias en hilo de fondo
-                                        withContext(Dispatchers.IO) {
-                                            SharedPreferencesUtils.savePreference(context, user.userId, user.role)
-                                        }
-
-                                        // Navegar (esto debe ejecutarse en el hilo principal)
-                                        navigateToHomeScreen(user.role)
+                                        usersViewModel.login(email, password)
                                     }
                                 } catch (e: Exception) {
                                     Log.e("LoginScreen", "Error durante login", e)
-                                    Toast.makeText(context, "Error de conexión. Intenta de nuevo.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Error de conexión. Intenta de nuevo.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 } finally {
                                     isLoading = false
                                 }
@@ -265,17 +344,28 @@ fun LoginScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(0.8f)
                 ) {
-                    Divider(modifier = Modifier.weight(1f), color = Color.Gray, thickness = 1.dp)
+                    Divider(
+                        modifier = Modifier.weight(1f),
+                        color = Color.Gray,
+                        thickness = 1.dp
+                    )
                     Canvas(modifier = Modifier.size(8.dp)) {
                         drawCircle(color = Color.Gray)
                     }
-                    Divider(modifier = Modifier.weight(1f), color = Color.Gray, thickness = 1.dp)
+                    Divider(
+                        modifier = Modifier.weight(1f),
+                        color = Color.Gray,
+                        thickness = 1.dp
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Row {
-                    Text(text = stringResource(id = R.string.register_prompt), color = Color.Gray)
+                    Text(
+                        text = stringResource(id = R.string.register_prompt),
+                        color = Color.Gray
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(id = R.string.register_button),

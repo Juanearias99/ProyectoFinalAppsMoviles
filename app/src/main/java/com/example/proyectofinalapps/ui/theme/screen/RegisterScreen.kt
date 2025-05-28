@@ -28,7 +28,11 @@ import androidx.compose.ui.unit.sp
 import com.example.proyectofinalapps.R
 import com.example.proyectofinalapps.model.Role
 import com.example.proyectofinalapps.model.User
+import com.example.proyectofinalapps.ui.theme.components.AlertMessage
+import com.example.proyectofinalapps.ui.theme.components.AlertType
+import com.example.proyectofinalapps.utils.RequestResult
 import com.example.proyectofinalapps.viewmodel.UserViewModel
+import kotlinx.coroutines.delay
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +55,7 @@ fun RegisterScreen(
     var confirmPassword by remember { mutableStateOf("") }
     var errorConfirmPassword by remember { mutableStateOf(false) }
     var visibilityPassword by remember { mutableStateOf(false) }
+    val registerResult by usersViewModel.registerResult.collectAsState()
     val context = LocalContext.current
 
     Scaffold(
@@ -71,7 +76,8 @@ fun RegisterScreen(
                 )
             )
         }
-    ) { paddingValues ->
+    )
+    { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,7 +117,7 @@ fun RegisterScreen(
                                 contentDescription = null,
                                 tint = Color(0xFF1976D2)
                             )
-                                      },
+                        },
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -126,7 +132,7 @@ fun RegisterScreen(
                                 contentDescription = null,
                                 tint = Color(0xFF1976D2)
                             )
-                                      },
+                        },
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -137,13 +143,21 @@ fun RegisterScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         OutlinedTextField(
-                            modifier = Modifier.menuAnchor().fillMaxWidth(),
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth(),
                             value = city,
                             onValueChange = {},
                             readOnly = true,
                             label = { Text("Ciudad") },
                             shape = RoundedCornerShape(12.dp),
-                            leadingIcon = { Icon(Icons.Rounded.LocationOn, contentDescription = null, tint = Color(0xFF1976D2)) },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Rounded.LocationOn,
+                                    contentDescription = null,
+                                    tint = Color(0xFF1976D2)
+                                )
+                            },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCity)
                             }
@@ -168,7 +182,13 @@ fun RegisterScreen(
                         value = address,
                         onValueChange = { address = it },
                         label = { Text("Dirección") },
-                        leadingIcon = { Icon(Icons.Rounded.Home, contentDescription = null, tint = Color(0xFF1976D2)) },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Rounded.Home,
+                                contentDescription = null,
+                                tint = Color(0xFF1976D2)
+                            )
+                        },
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -177,7 +197,13 @@ fun RegisterScreen(
                         value = email,
                         onValueChange = { email = it },
                         label = { Text("Correo electrónico") },
-                        leadingIcon = { Icon(Icons.Rounded.Email, contentDescription = null, tint = Color(0xFF1976D2)) },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Rounded.Email,
+                                contentDescription = null,
+                                tint = Color(0xFF1976D2)
+                            )
+                        },
                         shape = RoundedCornerShape(12.dp),
                         isError = errorEmail,
                         modifier = Modifier.fillMaxWidth(),
@@ -191,7 +217,13 @@ fun RegisterScreen(
                         value = password,
                         onValueChange = { password = it },
                         label = { Text("Contraseña") },
-                        leadingIcon = { Icon(Icons.Rounded.Lock, contentDescription = null, tint = Color(0xFF1976D2)) },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Rounded.Lock,
+                                contentDescription = null,
+                                tint = Color(0xFF1976D2)
+                            )
+                        },
                         trailingIcon = {
                             IconButton(onClick = { visibilityPassword = !visibilityPassword }) {
                                 Icon(
@@ -214,7 +246,13 @@ fun RegisterScreen(
                         value = confirmPassword,
                         onValueChange = { confirmPassword = it },
                         label = { Text("Confirmar contraseña") },
-                        leadingIcon = { Icon(Icons.Rounded.Lock, contentDescription = null, tint = Color(0xFF1976D2)) },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Rounded.Lock,
+                                contentDescription = null,
+                                tint = Color(0xFF1976D2)
+                            )
+                        },
                         trailingIcon = {
                             IconButton(onClick = { visibilityPassword = !visibilityPassword }) {
                                 Icon(
@@ -236,6 +274,44 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+
+
+                when (registerResult) {
+                    null -> {
+                    }
+
+                    is RequestResult.Success -> {
+
+                        AlertMessage(
+                            type = AlertType.SUCESS,
+                            message = (registerResult as RequestResult.Success).message
+                        )
+                        LaunchedEffect(Unit) {
+                            delay(3000)
+                            usersViewModel.resetRegisterResult()
+                            navigateToLoginScreenR()
+                        }
+
+                    }
+
+                    is RequestResult.Failure -> {
+                        AlertMessage(
+                            type = AlertType.ERROR,
+                            message = (registerResult as RequestResult.Failure).errorMessage
+                        )
+
+                        LaunchedEffect(Unit) {
+                            delay(3000)
+                            usersViewModel.resetRegisterResult()
+
+                        }
+                    }
+
+                    is RequestResult.Loading -> {
+                        LinearProgressIndicator()
+                    }
+                }
+
                 Button(
                     onClick = {
                         errorEmail = email.isBlank()
@@ -245,7 +321,7 @@ fun RegisterScreen(
                         if (!errorEmail && !errorPassword && !errorConfirmPassword) {
                             usersViewModel.create(
                                 User(
-                                    userId = UUID.randomUUID().toString(),
+                                    userId = "",
                                     name = name,
                                     lastName = lastName,
                                     ciudad = city,
@@ -256,10 +332,9 @@ fun RegisterScreen(
                                     confirmPassword = confirmPassword
                                 )
                             )
-                            Toast.makeText(context, "Usuario Creado exitosamente", Toast.LENGTH_SHORT).show()
-                            navigateToLoginScreenR()
                         }
                     },
+
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),

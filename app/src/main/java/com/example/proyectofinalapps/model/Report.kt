@@ -1,5 +1,6 @@
 package com.example.proyectofinalapps.model
 
+import java.time.LocalDateTime
 import java.util.Date
 
 class Report (
@@ -8,11 +9,11 @@ class Report (
     var descripcion: String,
     var categoria: String,
     var localizacion: Location,
-    var imagenes: List<String>,
-    var fechaCreacion: Date,
-    var estado: String,
-    var idUsuario: User,
-    var idComentario: Comment,
-    var idNotificacion: Notification
+    var imagenes: List<String> = listOf(),
+    var fechaCreacion: LocalDateTime = LocalDateTime.now(),
+    var estado: ReportState = ReportState.PENDIENTE,
+    var idUsuario: String = "",
+    var idComentario: List<Comment> = listOf(),
+    var idNotificacion: String = ""
 ) {
 }
