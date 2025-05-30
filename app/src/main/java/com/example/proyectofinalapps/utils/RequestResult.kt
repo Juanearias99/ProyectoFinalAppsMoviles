@@ -1,6 +1,5 @@
 package com.example.proyectofinalapps.utils
 
-import com.mapbox.base.common.logger.model.Message
 
 sealed class RequestResult {
     data class Success(val message: String): RequestResult()

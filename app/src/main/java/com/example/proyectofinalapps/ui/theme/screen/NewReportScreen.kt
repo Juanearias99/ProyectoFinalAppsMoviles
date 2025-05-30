@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,11 +22,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinalapps.R
+import com.example.proyectofinalapps.ui.theme.components.AlertMessage
+import com.example.proyectofinalapps.ui.theme.components.AlertType
 import com.example.proyectofinalapps.ui.theme.components.TextFieldForm
+import com.example.proyectofinalapps.utils.RequestResult
+import com.example.proyectofinalapps.viewmodel.ReportViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewReportScreen(navigateToHomeUser: () -> Unit) {
+fun NewReportScreen(
+    reportViewModel: ReportViewModel,
+    navigateToHomeUser: () -> Unit
+) {
 
     var nameReport by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
@@ -35,8 +45,12 @@ fun NewReportScreen(navigateToHomeUser: () -> Unit) {
     var expandedCategory by remember { mutableStateOf(false) }
     var description by remember { mutableStateOf("") }
     var ubication by remember { mutableStateOf("") }
-    val context = LocalContext.current
     var selectedFileName by remember { mutableStateOf("Subir Archivo") }
+    val operationResult by reportViewModel.operationResult.collectAsState()
+    val isLoading by reportViewModel.isLoading.collectAsState()
+    val context = LocalContext.current
+
+
 
     Scaffold(
         topBar = {
@@ -141,8 +155,7 @@ fun NewReportScreen(navigateToHomeUser: () -> Unit) {
                 contract = ActivityResultContracts.GetContent()
             ) { uri: Uri? ->
                 uri?.let {
-                    selectedFileName =
-                        it.lastPathSegment ?: context.getString(R.string.upload_file_description)
+                    selectedFileName = it.lastPathSegment ?: context.getString(R.string.upload_file_description)
                 }
             }
 
@@ -167,6 +180,44 @@ fun NewReportScreen(navigateToHomeUser: () -> Unit) {
             }
 
             Spacer(modifier = Modifier.height(50.dp))
+
+
+            when (operationResult) {
+                null -> {
+                }
+
+                is RequestResult.Success -> {
+
+                    AlertMessage(
+                        type = AlertType.SUCESS,
+                        message = (operationResult as RequestResult.Success).message
+                    )
+                    LaunchedEffect(Unit) {
+                        delay(3000)
+                        reportViewModel.resetOperationResult()
+                        navigateToHomeUser()
+                    }
+
+                }
+
+                is RequestResult.Failure -> {
+                    AlertMessage(
+                        type = AlertType.ERROR,
+                        message = (operationResult as RequestResult.Failure).errorMessage
+                    )
+
+                    LaunchedEffect(Unit) {
+                        delay(3000)
+                        reportViewModel.resetOperationResult()
+
+                    }
+                }
+
+                is RequestResult.Loading -> {
+                    LinearProgressIndicator()
+                }
+            }
+
             Button(
                 onClick = { },
                 colors = ButtonDefaults.buttonColors(

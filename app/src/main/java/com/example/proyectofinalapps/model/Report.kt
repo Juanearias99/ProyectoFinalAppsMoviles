@@ -3,7 +3,7 @@ package com.example.proyectofinalapps.model
 import java.time.LocalDateTime
 import java.util.Date
 
-class Report (
+data class Report (
     var idReporte: String,
     var titulo: String,
     var descripcion: String,

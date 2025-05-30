@@ -151,6 +151,7 @@ fun Navigation() {
 
             composable<RouteScreen.NewReportScreen> {
                 NewReportScreen(
+                    reportViewModel = mainViewModel.reportViewModel,
                     navigateToHomeUser = { navController.navigate(RouteScreen.HomeUser) }
                 )
             }

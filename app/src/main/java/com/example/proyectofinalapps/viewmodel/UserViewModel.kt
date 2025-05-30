@@ -1,21 +1,17 @@
 package com.example.proyectofinalapps.viewmodel
 
-import androidx.compose.material3.IconToggleButton
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.proyectofinalapps.model.Role
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.example.proyectofinalapps.model.User
 import com.example.proyectofinalapps.utils.RequestResult
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
-import com.mapbox.maps.extension.style.expressions.dsl.generated.id
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.UUID
 
 class UserViewModel : ViewModel() {
 
@@ -32,13 +28,14 @@ class UserViewModel : ViewModel() {
 
 
     init {
-        getUsers()
+       getUsers()
     }
 
     fun create(user: User) {
         viewModelScope.launch {
             _registerResult.value = RequestResult.Loading
-            _registerResult.value = runCatching { createFirebase(user)
+            _registerResult.value = runCatching {
+                createFirebase(user)
             }.fold(
                 onSuccess = { RequestResult.Success("User created successfully") },
                 onFailure = { RequestResult.Failure(it.message ?: "Error creating user") }
@@ -48,7 +45,8 @@ class UserViewModel : ViewModel() {
 
     private suspend fun createFirebase(user: User) {
         val responseUser = auth.createUserWithEmailAndPassword(user.email, user.password).await()
-        val firebaseUserId = responseUser.user?.uid ?: throw Exception("No se pudo obtener el ID del usuario")
+        val firebaseUserId =
+            responseUser.user?.uid ?: throw Exception("No se pudo obtener el ID del usuario")
 
         val userCopy = user.copy(
             userId = firebaseUserId, // ✅ ahora sí coincide
